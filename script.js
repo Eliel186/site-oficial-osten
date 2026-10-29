@@ -218,16 +218,41 @@
   window.addEventListener('resize', acordar, { passive: true });
   acordar();
 
-  // ---------- vídeo da planta: só baixa e toca quando chega perto da tela ----------
+  // ---------- vídeo da planta: só baixa e toca quando a pessoa chega na seção ----------
   document.querySelectorAll('video[data-src]').forEach((v) => {
-    const carregar = () => { if (!v.src) { v.src = v.getAttribute('data-src'); } };
-    if (!io) { carregar(); v.play && v.play().catch(() => {}); return; }
+    let naSecao = false;
+    const carregar = () => {
+      if (v.getAttribute('src')) return;
+      // O Safari do iPhone só deixa tocar sozinho se estiver sem som e dentro da página no momento do play
+      v.muted = true;
+      v.defaultMuted = true;
+      v.playsInline = true;
+      v.setAttribute('muted', '');
+      v.setAttribute('playsinline', '');
+      v.src = v.getAttribute('data-src');
+      v.load();
+    };
+    // Celular em economia de energia ou de dados bloqueia o autoplay: toca no primeiro toque na tela
+    const tocarNoToque = () => {
+      document.removeEventListener('touchstart', tocarNoToque);
+      document.removeEventListener('click', tocarNoToque);
+      if (naSecao) tocar();
+    };
+    const tocar = () => {
+      const p = v.play();
+      if (p && p.catch) p.catch(() => {
+        document.addEventListener('touchstart', tocarNoToque, { passive: true, once: true });
+        document.addEventListener('click', tocarNoToque, { once: true });
+      });
+    };
+    if (!io) { carregar(); tocar(); return; }
     new IntersectionObserver((entries) => {
       entries.forEach((e) => {
-        if (e.isIntersecting) { carregar(); const p = v.play(); if (p) p.catch(() => {}); }
+        naSecao = e.isIntersecting;
+        if (naSecao) { carregar(); tocar(); }
         else if (!v.paused) v.pause();
       });
-    }, { rootMargin: '0px 0px 80px 0px' }).observe(v);
+    }, { rootMargin: '0px 0px 80px 0px', threshold: 0 }).observe(v);
   });
 
   // ---------- formulário de análise em 4 etapas ----------

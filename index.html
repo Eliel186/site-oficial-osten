@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Osten · Fluxo Previsível</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Osten. Método Fluxo Previsível: captação, conversão e retenção em um único sistema.">
+<link rel="icon" type="image/png" href="assets/logo-vertical.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@200;300;400;600;800&amp;family=Inter+Tight:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#000}
+a{color:#C8F0F8}a:hover{color:#F8C8F8}
+.os *{box-sizing:border-box}
+.os h1,.os h2,.os h3,.os p,.os ul{margin:0}
+.grad{background:linear-gradient(100deg,#F8C8F8 0%,#E8D8F8 45%,#C8F0F8 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.rw .w{display:inline-block;margin-right:.24em}
+.anim .rw .w{will-change:transform,opacity;--k:clamp(0, calc((var(--p, 0) - var(--i) * 0.035) / 0.3), 1);opacity:var(--k);transform:translateY(calc((1 - var(--k)) * 70px))}
+.anim .fade{opacity:0;transform:translateY(40px);transition:opacity .9s cubic-bezier(.22,1,.36,1),transform .9s cubic-bezier(.22,1,.36,1)}
+.anim .fade.in{opacity:1;transform:none}
+.kick{font-family:Sora,sans-serif;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:#8A8A8A}
+.cta{position:relative;display:inline-flex;align-items:center;gap:12px;padding:6px 6px 6px 28px;min-height:56px;border-radius:999px;color:#000;background:#fff;font-weight:600;text-decoration:none;box-shadow:0 0 28px 2px rgba(216,144,240,.35),0 0 60px -10px rgba(144,240,248,.4);transition:box-shadow .5s,transform .3s cubic-bezier(.34,1.56,.64,1)}
+.cta:hover{color:#000;transform:scale(1.03);box-shadow:0 0 44px 8px rgba(216,144,240,.5),0 0 90px -6px rgba(144,240,248,.55)}
+.cta .arr{width:44px;height:44px;border-radius:999px;display:grid;place-items:center;background:linear-gradient(135deg,#D890F0,#90F0F8);color:#000}
+.ghost{display:inline-flex;align-items:center;min-height:56px;padding:0 28px;border-radius:999px;border:1px solid rgba(255,255,255,.18);color:#fff;text-decoration:none;transition:border-color .3s,background .3s}
+.ghost:hover{color:#fff;border-color:rgba(200,240,248,.6);background:rgba(255,255,255,.04)}
+.navlink{display:inline-flex;align-items:center;min-height:40px;padding:0 16px;border-radius:999px;color:#A3A3A3;font-size:13px;font-weight:500;text-decoration:none;transition:background .3s,color .3s,transform .3s}
+.navlink:hover{color:#fff;background:rgba(255,255,255,.08);transform:translateY(-1px)}
+.card{position:relative;border-radius:28px;background:#0A0A0A;border:1px solid rgba(255,255,255,.1);transition:border-color .5s,transform .5s}
+.card:hover{border-color:rgba(216,144,240,.45);transform:translateY(-4px)}
+.gborder{position:relative;border-radius:32px;padding:1px;background:linear-gradient(140deg,rgba(216,144,240,.7),rgba(255,255,255,.06) 40%,rgba(255,255,255,.06) 60%,rgba(144,240,248,.7))}
+.ico{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.12);background:#141414;margin-bottom:20px}
+.float{animation:flt 6s ease-in-out infinite}
+@keyframes flt{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.flutua{animation:flutua 7s ease-in-out infinite}
+@keyframes flutua{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-22px) rotate(3deg)}}
+.pulse{animation:pls 2s ease-in-out infinite}
+@keyframes pls{0%,100%{opacity:.35}50%{opacity:1}}
+.bob{animation:bob 2s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(10px)}}
+.marq{display:flex;gap:56px;width:max-content;animation:mq 32s linear infinite}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.plat{display:inline-flex;align-items:center;gap:12px;font-size:14px;color:#A3A3A3;white-space:nowrap}
+.plat i{width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,#D890F0,#90F0F8)}
+.opt{display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%;min-height:60px;padding:16px 22px;border-radius:18px;border:1px solid rgba(255,255,255,.12);background:#0D0D0D;color:#fff;font:inherit;font-size:16px;text-align:left;cursor:pointer;transition:border-color .3s,background .3s,transform .3s}
+.opt:hover{border-color:rgba(216,144,240,.6);background:#141414;transform:translateX(4px)}
+.back{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:transparent;color:#A3A3A3;font:inherit;font-size:14px;cursor:pointer}
+.back:hover{color:#fff}
+.bar{flex:1;height:4px;border-radius:4px;background:rgba(255,255,255,.12);transition:background .4s}
+.bar.on{background:linear-gradient(90deg,#D890F0,#90F0F8)}
+#qDone[hidden]{display:none !important}
+.faq{border-bottom:1px solid rgba(255,255,255,.1)}
+.faq summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:26px 0;font-family:Sora,sans-serif;font-size:19px;font-weight:600;color:#fff}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:#F8C8F8}
+.faq .pl{flex:none;width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,.18);display:grid;place-items:center;transition:transform .4s}
+.faq[open] .pl{transform:rotate(45deg);border-color:#D890F0}
+.faq p{padding:0 56px 26px 0;font-size:16px;line-height:1.65;color:#A3A3A3}
+.bcard{flex:none;width:300px;padding:32px;border-radius:28px;background:#0A0A0A;border:1px solid rgba(255,255,255,.1)}
+.ph{color:#F8C8F8;font-family:'Inter Tight',sans-serif;font-size:15px;letter-spacing:0;font-weight:500}
+@media (max-width:760px){.navmid{display:none !important}.heroh1{font-size:52px !important}.h2big{font-size:40px !important}.sect{padding-left:16px !important;padding-right:16px !important}.faq p{padding-right:0}}
+@media (prefers-reduced-motion:reduce){.float,.flutua,.pulse,.bob,.marq{animation:none}.rw .w{opacity:1;transform:none}.fade{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div class="os" data-ref="Root" style="position: relative; background: #000; color: #fff; font-family: 'Inter Tight', system-ui, sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased">
+
+<div aria-hidden="true" style="pointer-events: none; position: fixed; inset: 0; z-index: 60; opacity: 0.04; background-image: radial-gradient(circle, rgba(255,255,255,1) 0.8px, transparent 0.8px); background-size: 3px 3px"></div>
+
+<header style="position: fixed; top: 20px; left: 0; right: 0; z-index: 50; display: flex; align-items: center; justify-content: space-between; padding: 0 32px; pointer-events: none">
+<a href="#topo" style="pointer-events: auto; display: flex; align-items: center" aria-label="Osten, voltar ao início">
+<img data-ref="Logo" src="assets/logo-horizontal.png" alt="Osten" style="height: 34px; width: auto; display: block">
+</a>
+<nav data-ref="Nav" class="navmid" aria-label="Navegação principal" style="pointer-events: auto; position: absolute; left: 50%; transform: translateX(-50%); height: 56px; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 50px; padding: 0 8px; background: rgba(20,20,20,.6); border: 1px solid rgba(255,255,255,.1); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); white-space: nowrap">
+<div data-ref="NavInner" style="display: flex; align-items: center; gap: 2px">
+<a class="navlink" href="#analise">Análise</a>
+<a class="navlink" href="#metodo">Método</a>
+<a class="navlink" href="#beneficios">Benefícios</a>
+<a class="navlink" href="#resultados">Resultados</a>
+<a class="navlink" href="#faq">FAQ</a>
+</div>
+<div data-ref="Star" aria-hidden="true" style="position: absolute; inset: 0; display: grid; place-items: center; opacity: 0; pointer-events: none">
+<svg viewBox="0 0 24 24" width="18" height="18" fill="#fff"><path d="M12 0 L14 10 L24 12 L14 14 L12 24 L10 14 L0 12 L10 10 Z"></path></svg>
+</div>
+</nav>
+<a class="ghost" href="https://wa.me/5512996013011" style="pointer-events: auto; min-height: 44px; padding: 0 20px; font-size: 14px; background: rgba(20,20,20,.6); backdrop-filter: blur(14px)">Falar no WhatsApp</a>
+</header>
+
+<!-- HERO -->
+<section id="topo" data-ref="Hero" aria-label="Apresentação" style="position: relative; min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 140px 24px 120px">
+<canvas data-ref="Wave" aria-hidden="true" style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: .55; mix-blend-mode: screen"></canvas>
+<div aria-hidden="true" style="position: absolute; top: 30%; left: 50%; width: 680px; height: 680px; transform: translate(-50%,-50%); border-radius: 50%; background: radial-gradient(circle, rgba(216,144,240,.16), rgba(144,240,248,.06) 45%, transparent 70%); filter: blur(40px); pointer-events: none"></div>
+<div aria-hidden="true" style="position: absolute; top: 14%; right: 9%; width: 288px; height: 288px; border-radius: 50%; border: 1px solid rgba(216,144,240,.12); pointer-events: none"></div>
+<div aria-hidden="true" style="position: absolute; bottom: 18%; left: 6%; width: 190px; height: 190px; border-radius: 50%; border: 1px solid rgba(144,240,248,.1); pointer-events: none"></div>
+<div data-ref="HeroInner" style="position: relative; z-index: 2; width: 100%; max-width: 860px; display: flex; flex-direction: column; align-items: center; gap: 28px; text-align: center; will-change: transform, opacity">
+<img src="assets/logo-vertical.png" alt="Osten" style="width: 150px; height: auto; opacity: .92; filter: drop-shadow(0 0 30px rgba(255,255,255,.12))">
+<h1 class="heroh1 grad" style="font-family: Sora, sans-serif; font-weight: 200; font-size: 112px; line-height: .95; letter-spacing: -.045em">Fluxo Previsível</h1>
+<p style="max-width: 640px; font-size: 22px; line-height: 1.45; font-weight: 300; color: #A3A3A3">O cérebro por trás do crescimento previsível. Conecta captação, conversão e retenção em um único sistema, para o seu negócio manter a agenda cheia todo mês.</p>
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px; margin-top: 8px">
+<a class="cta" href="#analise">Quero uma análise gratuita<span class="arr" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M13 6l6 6-6 6"></path></svg></span></a>
+<a class="ghost" href="#metodo">Conhecer o método</a>
+</div>
+<p style="font-size: 13px; color: #8A8A8A; max-width: 320px">Analisamos seu negócio e mostramos onde você está perdendo clientes.</p>
+</div>
+<div class="bob" aria-hidden="true" style="position: absolute; bottom: 32px; left: 50%; margin-left: -12px; z-index: 3; opacity: .45">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#A3A3A3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"></path><path d="M19 12l-7 7-7-7"></path></svg>
+</div>
+<div aria-hidden="true" style="position: absolute; bottom: 0; left: 0; right: 0; height: 120px; background: linear-gradient(to bottom, transparent, #000); pointer-events: none"></div>
+</section>
+
+<!-- PLATAFORMAS -->
+<aside aria-label="Canais que a Osten gerencia" style="position: relative; overflow: hidden; padding: 22px 0; border-top: 1px solid rgba(255,255,255,.06); border-bottom: 1px solid rgba(255,255,255,.06)">
+<div class="marq">
+<span class="plat"><i></i>Meta Ads</span><span class="plat"><i></i>Google Ads</span><span class="plat"><i></i>Google Meu Negócio</span><span class="plat"><i></i>Instagram</span><span class="plat"><i></i>WhatsApp</span><span class="plat"><i></i>SEO local</span><span class="plat"><i></i>Landing pages</span><span class="plat"><i></i>CRM</span><span class="plat"><i></i>Atendimento com IA</span>
+<span class="plat" aria-hidden="true"><i></i>Meta Ads</span><span class="plat" aria-hidden="true"><i></i>Google Ads</span><span class="plat" aria-hidden="true"><i></i>Google Meu Negócio</span><span class="plat" aria-hidden="true"><i></i>Instagram</span><span class="plat" aria-hidden="true"><i></i>WhatsApp</span><span class="plat" aria-hidden="true"><i></i>SEO local</span><span class="plat" aria-hidden="true"><i></i>Landing pages</span><span class="plat" aria-hidden="true"><i></i>CRM</span><span class="plat" aria-hidden="true"><i></i>Atendimento com IA</span>
+</div>
+<div aria-hidden="true" style="position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, #000, transparent 12%, transparent 88%, #000)"></div>
+</aside>
+
+<!-- INTRO DO MÉTODO -->
+<section class="sect" style="position: relative; padding: 160px 64px 40px; max-width: 1100px; margin: 0 auto; text-align: center">
+<p class="kick fade" data-fade="1">Sistema Osten</p>
+<h2 class="rw h2big" data-reveal="1" style="margin-top: 20px; font-family: Sora, sans-serif; font-weight: 300; font-size: 76px; line-height: 1.04; letter-spacing: -.035em">
+<span class="w" style="--i:0">Crescimento</span><span class="w" style="--i:1">não</span><span class="w" style="--i:2">acontece</span><span class="w" style="--i:3">por</span><span class="w" style="--i:4">acaso.</span><span class="w grad" style="--i:5">Ele</span><span class="w grad" style="--i:6">segue</span><span class="w grad" style="--i:7">um</span><span class="w grad" style="--i:8">sistema.</span>
+</h2>
+<p class="fade" data-fade="1" style="margin: 28px auto 0; max-width: 640px; font-size: 19px; line-height: 1.6; color: #A3A3A3">Em vez de ações isoladas, montamos um fluxo em que cada etapa alimenta a próxima: quem chega vira contato, o contato vira cliente e o cliente fica.</p>
+</section>
+
+<!-- PROBLEMAS + CURVA -->
+<section id="problema" data-ref="CurveSec" style="position: relative">
+<div aria-hidden="true" style="pointer-events: none; position: absolute; left: 0; right: 0; top: -40vh; height: 100vh; z-index: 1; overflow: visible">
+<svg viewBox="0 0 1440 800" preserveAspectRatio="none" style="width: 100%; height: 100%; overflow: visible">
+<defs>
+<filter id="ob90" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="90"></feGaussianBlur></filter>
+<filter id="ob60" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="60"></feGaussianBlur></filter>
+<filter id="ob40" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="40"></feGaussianBlur></filter>
+<linearGradient id="ovol" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#F8C8F8"></stop><stop offset="50%" stop-color="#FFFFFF"></stop><stop offset="100%" stop-color="#C8F0F8"></stop></linearGradient>
+<linearGradient id="omg" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="black"></stop><stop offset="12%" stop-color="white"></stop><stop offset="88%" stop-color="white"></stop><stop offset="100%" stop-color="black"></stop></linearGradient>
+<mask id="ofade"><rect x="-200" y="-400" width="1840" height="1600" fill="url(#omg)"></rect></mask>
+</defs>
+<path data-ref="C1" filter="url(#ob90)" opacity="0.18" fill="#D890F0"></path>
+<path data-ref="C2" filter="url(#ob60)" opacity="0.2" fill="#90F0F8"></path>
+<path data-ref="C3" filter="url(#ob40)" opacity="0.3" fill="#FFFFFF"></path>
+<path data-ref="C4" fill="url(#ovol)" mask="url(#ofade)"></path>
+</svg>
+</div>
+<div class="sect" style="position: relative; z-index: 2; padding: 360px 64px 140px; max-width: 1360px; margin: 0 auto">
+<h2 class="rw h2big" data-reveal="1" style="font-family: Sora, sans-serif; font-weight: 600; font-size: 72px; line-height: 1.05; letter-spacing: -.03em; text-align: center; max-width: 1100px; margin: 0 auto">
+<span class="w grad" style="--i:0">Seu</span><span class="w grad" style="--i:1">negócio</span><span class="w grad" style="--i:2">pode</span><span class="w grad" style="--i:3">estar</span><span class="w" style="--i:4">perdendo</span><span class="w" style="--i:5">clientes</span><span class="w" style="--i:6">todos</span><span class="w" style="--i:7">os</span><span class="w" style="--i:8">dias.</span>
+</h2>
+<p class="rw" data-reveal="1" style="margin: 24px auto 0; max-width: 680px; text-align: center; font-size: 19px; line-height: 1.55; color: #A3A3A3">
+<span class="w" style="--i:0">Reconheça</span><span class="w" style="--i:1">o</span><span class="w" style="--i:2">cenário.</span><span class="w" style="--i:3">Se</span><span class="w" style="--i:4">um</span><span class="w" style="--i:5">destes</span><span class="w" style="--i:6">pontos</span><span class="w" style="--i:7">existe</span><span class="w" style="--i:8">hoje,</span><span class="w" style="--i:9">tem</span><span class="w" style="--i:10">receita</span><span class="w" style="--i:11">ficando</span><span class="w" style="--i:12">na</span><span class="w" style="--i:13">mesa.</span>
+</p>
+<div style="margin-top: 80px; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px">
+<div class="fade" data-fade="1"><div class="card float" style="padding: 32px; height: 100%">
+<div class="ico" style="color: #D890F0"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg></div>
+<h3 style="font-family: Sora, sans-serif; font-size: 22px; font-weight: 600">Agenda vazia</h3>
+<p style="margin-top: 10px; font-size: 16px; line-height: 1.55; color: #A3A3A3">Horários ociosos e capacidade parada mesmo com esforço no boca a boca.</p>
+</div></div>
+<div class="fade" data-fade="1"><div class="card float" style="padding: 32px; height: 100%; animation-delay: .6s">
+<div class="ico" style="color: #C8F0F8"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="4"></circle><path d="M2 21c0-4 3-6 7-6s7 2 7 6"></path><path d="M17 4a4 4 0 0 1 0 8M22 21c0-3-2-5-4-5.5"></path></svg></div>
+<h3 style="font-family: Sora, sans-serif; font-size: 22px; font-weight: 600">Dependência de indicação</h3>
+<p style="margin-top: 10px; font-size: 16px; line-height: 1.55; color: #A3A3A3">Crescimento imprevisível, refém de quem já é cliente lembrar de você.</p>
+</div></div>
+<div class="fade" data-fade="1"><div class="card float" style="padding: 32px; height: 100%; animation-delay: 1.2s">
+<div class="ico" style="color: #D890F0"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="5"></circle><circle cx="12" cy="12" r="1"></circle></svg></div>
+<h3 style="font-family: Sora, sans-serif; font-size: 22px; font-weight: 600">Anúncios que não funcionam</h3>
+<p style="margin-top: 10px; font-size: 16px; line-height: 1.55; color: #A3A3A3">Verba investida sem retorno claro e criativos sem estratégia.</p>
+</div></div>
+<div class="fade" data-fade="1"><div class="card float" style="padding: 32px; height: 100%; animation-delay: .3s">
+<div class="ico" style="color: #C8F0F8"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"></path></svg></div>
+<h3 style="font-family: Sora, sans-serif; font-size: 22px; font-weight: 600">Pergunta o preço e some</h3>
+<p style="margin-top: 10px; font-size: 16px; line-height: 1.55; color: #A3A3A3">O contato chega no WhatsApp e ninguém acompanha até virar cliente.</p>
+</div></div>
+<div class="fade" data-fade="1"><div class="card float" style="padding: 32px; height: 100%; animation-delay: .9s">
+<div class="ico" style="color: #D890F0"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"></path></svg></div>
+<h3 style="font-family: Sora, sans-serif; font-size: 22px; font-weight: 600">Baixa previsibilidade</h3>
+<p style="margin-top: 10px; font-size: 16px; line-height: 1.55; color: #A3A3A3">Meses bons e ruins sem entender o porquê nem como reagir.</p>
+</div></div>
+<div class="fade" data-fade="1"><div class="card float" style="padding: 32px; height: 100%; animation-delay: 1.5s">
+<div class="ico" style="color: #C8F0F8"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5z"></path></svg></div>
+<h3 style="font-family: Sora, sans-serif; font-size: 22px; font-weight: 600">Marca genérica</h3>
+<p style="margin-top: 10px; font-size: 16px; line-height: 1.55; color: #A3A3A3">Comunicação parecida com a de qualquer outro negócio do bairro.</p>
+</div></div>
+</div>
+</div>
+</section>
+
+<!-- ANÁLISE (FORMULÁRIO EM ETAPAS) -->
+<section id="analise" class="sect" style="position: relative; padding: 120px 64px; max-width: 1360px; margin: 0 auto">
+<div class="fade gborder" data-fade="1" style="border-radius: 40px"><div style="border-radius: 39px; background: #050505; display: flex; flex-wrap: wrap; gap: 56px; padding: 64px">
+<div style="flex: 1 1 340px; display: flex; flex-direction: column; gap: 20px">
+<p class="kick">Análise gratuita Osten</p>
+<h2 class="h2big" style="font-family: Sora, sans-serif; font-weight: 600; font-size: 56px; line-height: 1.05; letter-spacing: -.03em">Pare de perder tempo. <span class="grad">Preencha o formulário.</span></h2>
+<p style="font-size: 17px; line-height: 1.6; color: #A3A3A3">Quatro perguntas rápidas. No fim, você manda as respostas no nosso WhatsApp e recebe o seu plano de crescimento.</p>
+<div style="margin-top: auto; display: flex; gap: 8px" aria-hidden="true">
+<span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span>
+</div>
+</div>
+<div style="flex: 1 1 440px; min-width: 0">
+<div id="qBox">
+<p id="qStep" style="font-size: 13px; color: #8A8A8A; letter-spacing: .1em">PERGUNTA 1 DE 4</p>
+<h3 id="qTitle" style="margin-top: 12px; font-family: Sora, sans-serif; font-size: 28px; font-weight: 600; line-height: 1.2"></h3>
+<p id="qSub" style="margin-top: 8px; font-size: 15px; color: #A3A3A3"></p>
+<div id="qOpts" style="margin-top: 28px; display: flex; flex-direction: column; gap: 10px"></div>
+<button id="qBack" class="back" type="button" style="margin-top: 20px" hidden>Voltar</button>
+</div>
+
+<div id="qDone" hidden style="display: flex; flex-direction: column; gap: 20px; align-items: flex-start">
+<div style="width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: linear-gradient(135deg,#D890F0,#90F0F8); color: #000"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"></path></svg></div>
+<h3 style="font-family: Sora, sans-serif; font-size: 30px; font-weight: 600">Diagnóstico pronto.</h3>
+<p style="font-size: 16px; line-height: 1.6; color: #A3A3A3">Envie as respostas no WhatsApp e a gente devolve onde o seu negócio está perdendo clientes.</p>
+<a class="cta" id="qWa" href="https://wa.me/5512996013011" target="_blank" rel="noopener noreferrer">Receber meu plano no WhatsApp<span class="arr" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M13 6l6 6-6 6"></path></svg></span></a>
+<button id="qRestart" class="back" type="button">Refazer</button>
+</div>
+</div>
+</div></div>
+</section>
+
+<!-- MÉTODO -->
+<section id="metodo" class="sect" style="position: relative; padding: 140px 64px; max-width: 1360px; margin: 0 auto">
+<div aria-hidden="true" style="position: absolute; left: -10%; top: 0; width: 420px; height: 420px; border-radius: 50%; background: radial-gradient(circle, rgba(216,144,240,.14), transparent 70%); filter: blur(30px); pointer-events: none"></div>
+<p class="kick fade" data-fade="1" style="text-align: center">Método Fluxo Previsível</p>
+<h2 class="rw h2big" data-reveal="1" style="margin: 20px auto 0; font-family: Sora, sans-serif; font-weight: 600; font-size: 72px; line-height: 1.05; letter-spacing: -.03em; text-align: center; max-width: 1000px">
+<span class="w grad" style="--i:0">Um</span><span class="w grad" style="--i:1">sistema</span><span class="w grad" style="--i:2">em</span><span class="w grad" style="--i:3">três</span><span class="w grad" style="--i:4">etapas.</span><span class="w" style="--i:5">Um</span><span class="w" style="--i:6">único</span><span class="w" style="--i:7">fluxo.</span>
+</h2>
+<p class="fade" data-fade="1" style="margin: 24px auto 0; max-width: 620px; text-align: center; font-size: 19px; line-height: 1.55; color: #A3A3A3">Cada etapa tem um trabalho e uma métrica mestra. Juntas, transformam contato em cliente e cliente em receita recorrente.</p>
+<div style="margin-top: 80px; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px">
+<div class="fade gborder" data-fade="1"><div style="height: 100%; border-radius: 31px; background: #050505; padding: 40px; display: flex; flex-direction: column; gap: 20px">
+<div style="display: flex; align-items: baseline; justify-content: space-between"><span class="grad" style="font-family: Sora, sans-serif; font-weight: 200; font-size: 64px; line-height: 1">01</span><span style="font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: #8A8A8A">Captação</span></div>
+<h3 style="font-family: Sora, sans-serif; font-size: 28px; font-weight: 600; line-height: 1.15">Ser encontrado, ser escolhido.</h3>
+<p style="font-size: 16px; line-height: 1.6; color: #A3A3A3">Encontramos pessoas realmente interessadas no que você vende, não curiosos.</p>
+<ul style="padding-left: 18px; display: flex; flex-direction: column; gap: 8px; font-size: 15px; line-height: 1.5; color: #D4D4D4">
+<li>Google Meu Negócio e SEO local</li>
+<li>Site institucional</li>
+<li>Campanhas geolocalizadas no Meta Ads e Google Ads com ofertas personalizadas</li>
+</ul>
+<div style="margin-top: auto; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.08)"><p style="font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: #8A8A8A">Métrica mestra</p><p style="margin-top: 6px; font-size: 17px; font-weight: 500">Contatos qualificados por mês</p></div>
+</div></div>
+<div class="fade gborder" data-fade="1"><div style="height: 100%; border-radius: 31px; background: #050505; padding: 40px; display: flex; flex-direction: column; gap: 20px">
+<div style="display: flex; align-items: baseline; justify-content: space-between"><span class="grad" style="font-family: Sora, sans-serif; font-weight: 200; font-size: 64px; line-height: 1">02</span><span style="font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: #8A8A8A">Conversão</span></div>
+<h3 style="font-family: Sora, sans-serif; font-size: 28px; font-weight: 600; line-height: 1.15">Contato não é cliente.</h3>
+<p style="font-size: 16px; line-height: 1.6; color: #A3A3A3">Transformamos interessados em clientes. Quem pergunta o preço e some passa a ser acompanhado.</p>
+<ul style="padding-left: 18px; display: flex; flex-direction: column; gap: 8px; font-size: 15px; line-height: 1.5; color: #D4D4D4">
+<li>Atendimento treinado com scripts</li>
+<li>Funil de acompanhamento multitoque</li>
+<li>IA para responder na hora, 24/7</li>
+<li>Rastreio da primeira mensagem até o fechamento</li>
+</ul>
+<div style="margin-top: auto; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.08)"><p style="font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: #8A8A8A">Métrica mestra</p><p style="margin-top: 6px; font-size: 17px; font-weight: 500">% de contatos que viram clientes</p></div>
+</div></div>
+<div class="fade gborder" data-fade="1"><div style="height: 100%; border-radius: 31px; background: #050505; padding: 40px; display: flex; flex-direction: column; gap: 20px">
+<div style="display: flex; align-items: baseline; justify-content: space-between"><span class="grad" style="font-family: Sora, sans-serif; font-weight: 200; font-size: 64px; line-height: 1">03</span><span style="font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: #8A8A8A">Retenção</span></div>
+<h3 style="font-family: Sora, sans-serif; font-size: 28px; font-weight: 600; line-height: 1.15">Quem fica paga o investimento.</h3>
+<p style="font-size: 16px; line-height: 1.6; color: #A3A3A3">A base cresce porque as saídas diminuem, não só porque entram clientes novos.</p>
+<ul style="padding-left: 18px; display: flex; flex-direction: column; gap: 8px; font-size: 15px; line-height: 1.5; color: #D4D4D4">
+<li>Experiência memorável na primeira visita</li>
+<li>Protocolo de onboarding</li>
+<li>Radar anti-evasão</li>
+</ul>
+<div style="margin-top: auto; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.08)"><p style="font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: #8A8A8A">Métrica mestra</p><p style="margin-top: 6px; font-size: 17px; font-weight: 500">Permanência média, em meses</p></div>
+</div></div>
+</div>
+</section>
+
+<!-- SISTEMA QUE UNE OS TRÊS ESTÁGIOS -->
+<section class="sect" style="position: relative; padding: 100px 64px 140px; max-width: 1360px; margin: 0 auto">
+<p class="kick fade" data-fade="1">Sistema Osten</p>
+<h2 class="rw h2big" data-reveal="1" style="margin-top: 20px; font-family: Sora, sans-serif; font-weight: 600; font-size: 60px; line-height: 1.08; letter-spacing: -.03em; max-width: 820px">
+<span class="w" style="--i:0">O</span><span class="w" style="--i:1">sistema</span><span class="w" style="--i:2">que</span><span class="w" style="--i:3">une</span><span class="w grad" style="--i:4">os</span><span class="w grad" style="--i:5">três</span><span class="w grad" style="--i:6">estágios.</span>
+</h2>
+<div data-draw-wrap="1" style="position: relative; margin-top: 72px">
+<svg aria-hidden="true" viewBox="0 0 1200 40" preserveAspectRatio="none" style="position: absolute; left: 0; right: 0; top: 34px; width: 100%; height: 40px; overflow: visible">
+<defs><linearGradient id="oline" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#D890F0"></stop><stop offset="100%" stop-color="#90F0F8"></stop></linearGradient></defs>
+<path d="M 60 20 C 300 -10, 400 50, 600 20 S 900 -10, 1140 20" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="2"></path>
+<path data-draw="1" d="M 60 20 C 300 -10, 400 50, 600 20 S 900 -10, 1140 20" fill="none" stroke="url(#oline)" stroke-width="2.5" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"></path>
+</svg>
+<div style="position: relative; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px">
+<div class="fade" data-fade="1" style="display: flex; flex-direction: column; gap: 16px">
+<div style="width: 104px; height: 104px; border-radius: 50%; display: grid; place-items: center; background: #050505; border: 1px solid rgba(216,144,240,.5); box-shadow: 0 0 40px -6px rgba(216,144,240,.45)"><span style="font-family: Sora, sans-serif; font-size: 13px; font-weight: 600; letter-spacing: .14em">ATRAIR</span></div>
+<p style="font-size: 11px; letter-spacing: .25em; text-transform: uppercase; color: #D890F0; font-weight: 600">Captação</p>
+<p style="font-size: 16px; line-height: 1.55; color: #A3A3A3; max-width: 300px">Tráfego qualificado, direcionado por intenção real de compra.</p>
+</div>
+<div class="fade" data-fade="1" style="display: flex; flex-direction: column; gap: 16px">
+<div style="width: 104px; height: 104px; border-radius: 50%; display: grid; place-items: center; background: #050505; border: 1px solid rgba(232,216,248,.5); box-shadow: 0 0 40px -6px rgba(232,216,248,.4)"><span style="font-family: Sora, sans-serif; font-size: 13px; font-weight: 600; letter-spacing: .14em">FECHAR</span></div>
+<p style="font-size: 11px; letter-spacing: .25em; text-transform: uppercase; color: #E8D8F8; font-weight: 600">Conversão</p>
+<p style="font-size: 16px; line-height: 1.55; color: #A3A3A3; max-width: 300px">Funis, automações e CRM para aumentar o fechamento.</p>
+</div>
+<div class="fade" data-fade="1" style="display: flex; flex-direction: column; gap: 16px">
+<div style="width: 104px; height: 104px; border-radius: 50%; display: grid; place-items: center; background: #050505; border: 1px solid rgba(144,240,248,.5); box-shadow: 0 0 40px -6px rgba(144,240,248,.45)"><span style="font-family: Sora, sans-serif; font-size: 13px; font-weight: 600; letter-spacing: .14em">MANTER</span></div>
+<p style="font-size: 11px; letter-spacing: .25em; text-transform: uppercase; color: #90F0F8; font-weight: 600">Retenção</p>
+<p style="font-size: 16px; line-height: 1.55; color: #A3A3A3; max-width: 300px">Cliente que fica mais tempo, menos cancelamento e receita recorrente.</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- BENEFÍCIOS (TRILHO QUE ANDA COM O SCROLL) -->
+<section id="beneficios" style="position: relative; padding: 120px 0 140px; overflow: hidden">
+<div class="sect" style="padding: 0 64px; max-width: 1360px; margin: 0 auto">
+<p class="kick fade" data-fade="1">Benefícios</p>
+<h2 class="rw h2big" data-reveal="1" style="margin-top: 20px; font-family: Sora, sans-serif; font-weight: 600; font-size: 64px; line-height: 1.05; letter-spacing: -.03em; max-width: 900px">
+<span class="w" style="--i:0">O</span><span class="w" style="--i:1">que</span><span class="w" style="--i:2">muda</span><span class="w" style="--i:3">no</span><span class="w grad" style="--i:4">seu</span><span class="w grad" style="--i:5">negócio.</span>
+</h2>
+</div>
+<div data-hsec="1" style="margin-top: 64px">
+<div data-htrack="1" style="display: flex; align-items: stretch; gap: 20px; padding: 0 64px; width: max-content; will-change: transform">
+<div class="bcard"><div class="ico" style="color: #D890F0"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18M8 15l2.5 2.5L16 13"></path></svg></div><h3 style="font-family: Sora, sans-serif; font-size: 22px; font-weight: 600">Agenda previsível</h3><p style="margin-top: 10px; font-size: 15px; line-height: 1.55; color: #A3A3A3">Saber quantos clientes entram no mês, antes do mês começar.</p></div>
+<div class="bcard"><div class="ico" style="color: #C8F0F8"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="6"></circle><path d="M8.5 14L7 22l5-3 5 3-1.5-8"></path></svg></div><h3 style="font-family: Sora, sans-serif; font-size: 22px; font-weight: 600">Mais fechamentos</h3><p style="margin-top: 10px; font-size: 15px; line-height: 1.55; color: #A3A3A3">Mais contatos virando cliente com atendimento que acompanha.</p></div>
+<div class="bcard"><div class="ico" style="color: #D890F0"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7l6 6 4-4 8 8"></path><path d="M17 17h4v-4"></path></svg></div><h3 style="font-family: Sora, sans-serif; font-size: 22px; font-weight: 600">Menor custo por cliente</h3><p style="margin-top: 10px; font-size: 15px; line-height: 1.55; color: #A3A3A3">Verba direcionada para quem tem intenção real de comprar.</p></div>
+<div class="bcard"><div class="ico" style="color: #C8F0F8"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5z"></path></svg></div><h3 style="font-family: Sora, sans-serif; font-size: 22px; font-weight: 600">Mais autoridade</h3><p style="margin-top: 10px; font-size: 15px; line-height: 1.55; color: #A3A3A3">Marca que se diferencia do resto do bairro.</p></div>
+<div class="bcard"><div class="ico" style="color: #D890F0"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s7-6.5 7-12a7 7 0 0 0-14 0c0 5.5 7 12 7 12z"></path><circle cx="12" cy="10" r="2.5"></circle></svg></div><h3 style="font-family: Sora, sans-serif; font-size: 22px; font-weight: 600">Google Meu Negócio otimizado</h3><p style="margin-top: 10px; font-size: 15px; line-height: 1.55; color: #A3A3A3">Aparecer para quem procura perto de você.</p></div>
+<div class="bcard"><div class="ico" style="color: #C8F0F8"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l9 5-9 5-9-5 9-5z"></path><path d="M3 12l9 5 9-5M3 17l9 5 9-5"></path></svg></div><h3 style="font-family: Sora, sans-serif; font-size: 22px; font-weight: 600">Estratégia exclusiva</h3><p style="margin-top: 10px; font-size: 15px; line-height: 1.55; color: #A3A3A3">Plano feito para o seu mercado e a sua concorrência local.</p></div>
+<div class="bcard"><div class="ico" style="color: #D890F0"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11v2a2 2 0 0 0 2 2h2l5 4V5L7 9H5a2 2 0 0 0-2 2z"></path><path d="M16 8a5 5 0 0 1 0 8"></path></svg></div><h3 style="font-family: Sora, sans-serif; font-size: 22px; font-weight: 600">Tráfego pago</h3><p style="margin-top: 10px; font-size: 15px; line-height: 1.55; color: #A3A3A3">Meta Ads e Google Ads geridos com método e número.</p></div>
+<div class="bcard"><div class="ico" style="color: #C8F0F8"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 14v-2a9 9 0 0 1 18 0v2"></path><rect x="3" y="14" width="4" height="6" rx="1.5"></rect><rect x="17" y="14" width="4" height="6" rx="1.5"></rect></svg></div><h3 style="font-family: Sora, sans-serif; font-size: 22px; font-weight: 600">Acompanhamento próximo</h3><p style="margin-top: 10px; font-size: 15px; line-height: 1.55; color: #A3A3A3">Contato direto com quem cuida da sua conta.</p></div>
+</div>
+</div>
+</section>
+
+<!-- DIFERENCIAL -->
+<section class="sect" style="position: relative; padding: 120px 64px; max-width: 1360px; margin: 0 auto">
+<div style="display: flex; flex-wrap: wrap; gap: 64px; align-items: center">
+<div style="flex: 1 1 460px; display: flex; flex-direction: column; gap: 24px">
+<p class="kick fade" data-fade="1">Nosso diferencial</p>
+<h2 class="rw h2big" data-reveal="1" style="font-family: Sora, sans-serif; font-weight: 600; font-size: 60px; line-height: 1.06; letter-spacing: -.03em">
+<span class="w grad" style="--i:0">Especialistas</span><span class="w grad" style="--i:1">em</span><span class="w" style="--i:2">negócios</span><span class="w" style="--i:3">locais.</span>
+</h2>
+<p class="fade" data-fade="1" style="font-size: 18px; line-height: 1.6; color: #A3A3A3">Nascemos atendendo estúdios de Pilates e levamos o mesmo sistema para negócios que precisam manter a capacidade ocupada.</p>
+<ul class="fade" data-fade="1" style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 14px">
+<li style="display: flex; gap: 14px; align-items: center; font-size: 17px"><span aria-hidden="true" style="flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: linear-gradient(135deg,#D890F0,#90F0F8); color: #000"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"></path></svg></span>Criativos e copies feitos para o seu mercado</li>
+<li style="display: flex; gap: 14px; align-items: center; font-size: 17px"><span aria-hidden="true" style="flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: linear-gradient(135deg,#D890F0,#90F0F8); color: #000"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"></path></svg></span>Time próprio de design e vídeo</li>
+<li style="display: flex; gap: 14px; align-items: center; font-size: 17px"><span aria-hidden="true" style="flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: linear-gradient(135deg,#D890F0,#90F0F8); color: #000"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"></path></svg></span>CRM próprio e atendimento com IA</li>
+<li style="display: flex; gap: 14px; align-items: center; font-size: 17px"><span aria-hidden="true" style="flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: linear-gradient(135deg,#D890F0,#90F0F8); color: #000"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"></path></svg></span>Linguagem que fala com o seu cliente</li>
+</ul>
+</div>
+<div class="fade" data-fade="1" style="flex: 1 1 420px; position: relative; min-height: 560px; display: grid; place-items: center">
+<div aria-hidden="true" style="position: absolute; width: 70%; height: 60%; border-radius: 50%; background: radial-gradient(circle, rgba(216,144,240,.22), rgba(144,240,248,.10) 50%, transparent 72%); filter: blur(50px); pointer-events: none"></div>
+<img class="flutua" src="assets/escultura-vidro-recorte.webp" alt="" style="position: relative; width: min(100%, 440px); height: auto; filter: drop-shadow(0 30px 60px rgba(216,144,240,.25))">
+</div>
+</div>
+</section>
+
+<!-- RESULTADOS -->
+<section id="resultados" class="sect" style="position: relative; padding: 120px 64px; max-width: 1360px; margin: 0 auto">
+<p class="kick fade" data-fade="1" style="text-align: center">Resultados</p>
+<h2 class="rw h2big" data-reveal="1" style="margin: 20px auto 0; font-family: Sora, sans-serif; font-weight: 600; font-size: 64px; line-height: 1.05; letter-spacing: -.03em; text-align: center; max-width: 960px">
+<span class="w grad" style="--i:0">Métricas</span><span class="w grad" style="--i:1">que</span><span class="w grad" style="--i:2">transformam</span><span class="w" style="--i:3">em</span><span class="w" style="--i:4">crescimento</span><span class="w" style="--i:5">constante.</span>
+</h2>
+<div class="fade gborder" data-fade="1" style="margin-top: 72px; border-radius: 40px"><div style="border-radius: 39px; background: radial-gradient(120% 140% at 50% 0%, rgba(216,144,240,.10), rgba(144,240,248,.04) 40%, #050505 70%); padding: 64px 56px; display: flex; flex-direction: column; align-items: center; gap: 44px; text-align: center">
+<div>
+<p class="kick">Clientes reais · primeiro mês com a Osten</p>
+<h3 style="margin-top: 14px; font-family: Sora, sans-serif; font-weight: 600; font-size: 40px; line-height: 1.1; letter-spacing: -.02em">O método aplicado em <span class="grad">negócios de verdade</span>.</h3>
+</div>
+<div style="width: 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 32px">
+<div><p class="grad" style="font-family: Sora, sans-serif; font-weight: 200; font-size: 104px; line-height: 1; letter-spacing: -.04em">15</p><p style="margin-top: 10px; font-size: 16px; color: #D4D4D4">matrículas fechadas no primeiro mês</p><p style="margin-top: 6px; font-size: 14px; color: #8A8A8A">Carla Mattos · Estúdio de Pilates</p></div>
+<div><p class="grad" style="font-family: Sora, sans-serif; font-weight: 200; font-size: 104px; line-height: 1; letter-spacing: -.04em">6</p><p style="margin-top: 10px; font-size: 16px; color: #D4D4D4">planos fechados, mais de R$ 3.300 em contratos</p><p style="margin-top: 6px; font-size: 14px; color: #8A8A8A">Rosangela · Estúdio de Pilates</p></div>
+<div><p class="grad" style="font-family: Sora, sans-serif; font-weight: 200; font-size: 104px; line-height: 1; letter-spacing: -.04em">5</p><p style="margin-top: 10px; font-size: 16px; color: #D4D4D4">pacientes fechados em um mês</p><p style="margin-top: 6px; font-size: 14px; color: #8A8A8A">Carla Alves · Fonoaudiologia</p></div>
+</div>
+</div></div>
+<div style="margin-top: 24px; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px">
+<div class="fade card" data-fade="1" style="padding: 36px; text-align: center"><p class="grad" style="font-family: Sora, sans-serif; font-weight: 200; font-size: 64px; line-height: 1">9</p><p style="margin-top: 10px; font-size: 15px; color: #A3A3A3">negócios locais atendidos hoje</p></div>
+<div class="fade card" data-fade="1" style="padding: 36px; text-align: center"><p class="grad" style="font-family: Sora, sans-serif; font-weight: 200; font-size: 64px; line-height: 1">4</p><p style="margin-top: 10px; font-size: 15px; color: #A3A3A3">segmentos: Pilates, fonoaudiologia, barbearia e locação de veículos</p></div>
+<div class="fade card" data-fade="1" style="padding: 36px; text-align: center"><p class="grad" style="font-family: Sora, sans-serif; font-weight: 200; font-size: 64px; line-height: 1">3</p><p style="margin-top: 10px; font-size: 15px; color: #A3A3A3">etapas integradas: captação, conversão e retenção</p></div>
+</div>
+</section>
+
+<!-- COMO COMEÇA -->
+<section id="como" class="sect" style="position: relative; padding: 120px 64px; max-width: 1360px; margin: 0 auto">
+<h2 class="rw h2big" data-reveal="1" style="font-family: Sora, sans-serif; font-weight: 600; font-size: 64px; line-height: 1.05; letter-spacing: -.03em; text-align: center">
+<span class="w grad" style="--i:0">Como</span><span class="w grad" style="--i:1">começa.</span>
+</h2>
+<div style="margin-top: 72px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px">
+<div class="fade card" data-fade="1" style="padding: 40px">
+<div style="width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; background: linear-gradient(135deg,#D890F0,#90F0F8); color: #000; font-family: Sora, sans-serif; font-weight: 600; font-size: 18px">1</div>
+<h3 style="margin-top: 28px; font-family: Sora, sans-serif; font-size: 24px; font-weight: 600">Diagnóstico gratuito</h3>
+<p style="margin-top: 12px; font-size: 16px; line-height: 1.6; color: #A3A3A3">Analisamos sua presença digital, concorrência, mercado local e perfil de cliente ideal, e mostramos onde você está perdendo clientes.</p>
+</div>
+<div class="fade card" data-fade="1" style="padding: 40px">
+<div style="width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; border: 1px solid rgba(216,144,240,.6); color: #fff; font-family: Sora, sans-serif; font-weight: 600; font-size: 18px">2</div>
+<h3 style="margin-top: 28px; font-family: Sora, sans-serif; font-size: 24px; font-weight: 600">Plano e implantação</h3>
+<p style="margin-top: 12px; font-size: 16px; line-height: 1.6; color: #A3A3A3">Desenhamos um plano personalizado e implantamos o sistema por fases, começando pelo que tem maior potencial de retorno.</p>
+</div>
+<div class="fade card" data-fade="1" style="padding: 40px">
+<div style="width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; border: 1px solid rgba(144,240,248,.6); color: #fff; font-family: Sora, sans-serif; font-weight: 600; font-size: 18px">3</div>
+<h3 style="margin-top: 28px; font-family: Sora, sans-serif; font-size: 24px; font-weight: 600">Acompanhamento por número</h3>
+<p style="margin-top: 12px; font-size: 16px; line-height: 1.6; color: #A3A3A3">Toda decisão olha para as métricas mestras. O que funciona fica, o que não funciona sai.</p>
+</div>
+</div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="sect" style="position: relative; padding: 120px 64px; max-width: 1360px; margin: 0 auto">
+<div style="display: flex; flex-wrap: wrap; gap: 64px">
+<div style="flex: 1 1 340px">
+<p class="kick fade" data-fade="1">Perguntas frequentes</p>
+<h2 class="rw h2big" data-reveal="1" style="margin-top: 20px; font-family: Sora, sans-serif; font-weight: 600; font-size: 56px; line-height: 1.06; letter-spacing: -.03em">
+<span class="w grad" style="--i:0">Tudo</span><span class="w grad" style="--i:1">o</span><span class="w grad" style="--i:2">que</span><span class="w" style="--i:3">você</span><span class="w" style="--i:4">precisa</span><span class="w" style="--i:5">saber.</span>
+</h2>
+<p class="fade" data-fade="1" style="margin-top: 20px; font-size: 16px; line-height: 1.6; color: #A3A3A3">Ficou alguma dúvida? Agende o diagnóstico gratuito e pergunte direto para a gente.</p>
+</div>
+<div class="fade" data-fade="1" style="flex: 2 1 560px; min-width: 0; border-top: 1px solid rgba(255,255,255,.1)">
+<details class="faq"><summary>O que é o Método Fluxo Previsível?<span class="pl" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg></span></summary><p>É o sistema integrado da Osten que conecta captação, conversão e retenção em um fluxo contínuo. Em vez de ações isoladas, cada etapa alimenta a próxima e tem uma métrica mestra para acompanhar.</p></details>
+<details class="faq"><summary>Quanto preciso investir?<span class="pl" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg></span></summary><p>O investimento é dividido entre o serviço e a verba de tráfego, ajustado ao porte do seu negócio. Na análise gratuita apresentamos os cenários adequados ao seu momento.</p></details>
+<details class="faq"><summary>Vocês atendem qualquer cidade?<span class="pl" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg></span></summary><p>Sim. O trabalho é 100% remoto e adaptamos a estratégia à concorrência local de cada cidade.</p></details>
+<details class="faq"><summary>Preciso gravar vídeos?<span class="pl" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg></span></summary><p>Ajuda muito, mas não é obrigatório. Temos um método para produzir criativos com o mínimo de exposição, mesmo com celular.</p></details>
+<details class="faq"><summary>Já faço anúncios, muda alguma coisa?<span class="pl" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg></span></summary><p>Sim. Fazemos o diagnóstico do que roda hoje e reestruturamos as campanhas dentro do método, ligando o anúncio ao atendimento e à retenção.</p></details>
+<details class="faq"><summary>Em quanto tempo aparecem resultados?<span class="pl" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg></span></summary><p>Os primeiros contatos qualificados costumam surgir nas primeiras semanas. A previsibilidade se consolida entre 60 e 90 dias, quando os dados acumulados permitem ajustes mais precisos.</p></details>
+<details class="faq"><summary>O método substitui minha equipe?<span class="pl" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg></span></summary><p>Não. Ele potencializa a equipe que você já tem, com estrutura, scripts e sistemas que ampliam o trabalho feito hoje.</p></details>
+<details class="faq"><summary>Preciso de um site antes de anunciar?<span class="pl" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg></span></summary><p>Recomendamos. Uma página com chamada clara, prova social e contato direto converte mais do que mandar o tráfego só para as redes sociais. A Osten cria essa página integrada às campanhas.</p></details>
+<details class="faq"><summary>Existe fidelidade?<span class="pl" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg></span></summary><p>Trabalhamos com contratos claros e transparentes, sem letras miúdas. Os detalhes a gente conversa direto na análise.</p></details>
+</div>
+</div>
+</section>
+
+<!-- SAIBA MAIS -->
+<section class="sect" style="padding: 40px 64px 80px; max-width: 1360px; margin: 0 auto">
+<details class="faq" style="border-top: 1px solid rgba(255,255,255,.06); border-bottom: 1px solid rgba(255,255,255,.06)">
+<summary><span><span class="kick" style="display: block">Saiba mais</span><span style="display: block; margin-top: 6px">Marketing e tráfego pago para negócios locais</span></span><span class="pl" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg></span></summary>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; padding-bottom: 32px">
+<div><h3 style="font-family: Sora, sans-serif; font-size: 18px; font-weight: 600">Gestão de tráfego</h3><p style="padding: 10px 0 0; font-size: 15px">Vai além de criar anúncios: pesquisa de palavras-chave, segmentação por comportamento e intenção, criativos que geram identificação e otimização contínua com dados reais.</p></div>
+<div><h3 style="font-family: Sora, sans-serif; font-size: 18px; font-weight: 600">Google Ads</h3><p style="padding: 10px 0 0; font-size: 15px">Capta quem já está procurando o seu serviço, como "Pilates perto de mim" ou "Pilates em São José dos Campos". Campanhas de busca local com localização e oferta clara geram contatos de alta intenção.</p></div>
+<div><h3 style="font-family: Sora, sans-serif; font-size: 18px; font-weight: 600">Meta Ads</h3><p style="padding: 10px 0 0; font-size: 15px">Constrói desejo no Instagram e no Facebook: mostra o ambiente, a equipe e a transformação dos clientes para pessoas com perfil compatível, com remarketing para quem ainda não fechou.</p></div>
+<div><h3 style="font-family: Sora, sans-serif; font-size: 18px; font-weight: 600">SEO local e Google Meu Negócio</h3><p style="padding: 10px 0 0; font-size: 15px">Perfil otimizado, avaliações e conteúdo com termos da sua região para aparecer nas primeiras posições sem depender só de anúncio.</p></div>
+<div><h3 style="font-family: Sora, sans-serif; font-size: 18px; font-weight: 600">Landing page</h3><p style="padding: 10px 0 0; font-size: 15px">Página com oferta clara, prova social e contato em um toque, integrada às campanhas e ao atendimento.</p></div>
+<div><h3 style="font-family: Sora, sans-serif; font-size: 18px; font-weight: 600">Atendimento no WhatsApp</h3><p style="padding: 10px 0 0; font-size: 15px">Scripts, acompanhamento multitoque e IA para responder na hora, para nenhum contato esfriar.</p></div>
+</div>
+</details>
+</section>
+
+<!-- CTA FINAL -->
+<section class="sect" style="position: relative; padding: 140px 64px 180px; overflow: hidden">
+<div aria-hidden="true" style="position: absolute; left: 50%; top: 50%; width: 900px; height: 500px; transform: translate(-50%,-50%); border-radius: 50%; background: radial-gradient(ellipse, rgba(216,144,240,.16), rgba(144,240,248,.07) 45%, transparent 70%); filter: blur(40px); pointer-events: none"></div>
+<div style="position: relative; max-width: 960px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 32px; text-align: center">
+<h2 class="rw h2big" data-reveal="1" style="font-family: Sora, sans-serif; font-weight: 300; font-size: 80px; line-height: 1.02; letter-spacing: -.04em">
+<span class="w" style="--i:0">Pronto</span><span class="w" style="--i:1">para</span><span class="w" style="--i:2">crescer</span><span class="w grad" style="--i:3">com</span><span class="w grad" style="--i:4">previsibilidade?</span>
+</h2>
+<p class="fade" data-fade="1" style="max-width: 540px; font-size: 18px; line-height: 1.6; color: #A3A3A3">Vamos aumentar o fluxo de clientes do seu negócio. Comece pelo diagnóstico gratuito.</p>
+<a class="cta fade" data-fade="1" href="https://wa.me/5512996013011">Agendar diagnóstico gratuito<span class="arr" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M13 6l6 6-6 6"></path></svg></span></a>
+</div>
+</section>
+
+<footer class="sect" style="border-top: 1px solid rgba(255,255,255,.08); padding: 56px 64px; display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 32px">
+<div style="display: flex; flex-direction: column; gap: 14px; max-width: 320px">
+<img src="assets/logo-horizontal.png" alt="Osten" style="height: 28px; width: auto; align-self: flex-start">
+<p style="font-size: 14px; line-height: 1.6; color: #8A8A8A">Criadora do Método Fluxo Previsível.</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px; font-size: 14px">
+<p style="color: #8A8A8A; font-size: 12px; letter-spacing: .2em; text-transform: uppercase">Contato</p>
+<a href="https://wa.me/5512996013011">WhatsApp</a>
+<a href="tel:+5512996013011">(12) 99601-3011</a>
+<a href="https://ostenagency.com.br">ostenagency.com.br</a>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px; font-size: 14px; color: #8A8A8A">
+<p style="font-size: 12px; letter-spacing: .2em; text-transform: uppercase">Serviços</p>
+<p>Gestão de tráfego pago</p>
+<p>Google Ads e Meta Ads</p>
+<p>Google Meu Negócio e SEO local</p>
+</div>
+<p style="width: 100%; padding-top: 24px; border-top: 1px solid rgba(255,255,255,.06); font-size: 13px; color: #8A8A8A">© 2026 Osten · São José dos Campos, SP</p>
+</footer>
+</div>
+<script src="script.js"></script>
+</body>
+</html>

@@ -11,9 +11,9 @@
   const heroInner = ref('HeroInner');
   const wave = ref('Wave');
   const curveSec = ref('CurveSec');
-  const curves = ['C1', 'C2', 'C3', 'C4'].map(ref);
+  const curveSvg = ref('CurveSvg');
   const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  // Celular: menos linhas nas ondas, 30 quadros por segundo e sem as camadas de brilho da curva
+  // Celular: menos linhas nas ondas e 30 quadros por segundo
   const mobile = window.matchMedia && window.matchMedia('(max-width: 760px), (pointer: coarse)').matches;
   const WHATSAPP = '5512996013011';
 
@@ -108,10 +108,6 @@
   let hMax = null;
   window.addEventListener('resize', () => { hMax = null; }, { passive: true });
 
-  // Camadas de brilho desfocado da curva pesam demais no celular
-  if (mobile) curves.slice(0, 3).forEach((el) => { if (el) el.style.display = 'none'; });
-  const curvasAtivas = mobile ? curves.slice(3) : curves;
-
   [hero, curveSec, drawWrap, hSec].concat(reveals).forEach(observar);
 
   // Blocos que aparecem ao entrar na tela: o navegador avisa, sem medir a cada quadro
@@ -178,23 +174,16 @@
       }
     }
 
-    // curva volumétrica que dobra com o scroll
-    if (curveTop !== null) {
+    // curva volumétrica que dobra com o scroll: desenhada uma vez na forma máxima,
+    // o scroll só a estica de baixo para cima (transform roda na placa de vídeo, sem redesenhar)
+    if (curveTop !== null && curveSvg) {
       const t = Math.max(0, Math.min(1, 1 - (curveTop - vh * 0.4) / vh));
       const antes = curveP;
       curveP += (t - curveP) * 0.18;
       if (Math.abs(t - curveP) > 0.001) continuar = true;
       if (Math.abs(curveP - antes) > 0.0005 || !frame.curvaDesenhada) {
         frame.curvaDesenhada = true;
-        const p = curveP;
-        // No celular a curva é espremida na largura: dobra menos para não virar um pico sobre o texto
-        const amp = mobile ? 0.3 : 1;
-        const yb = 400, ty = yb - p * 500 * amp, by = yb - p * 150 * amp, cx = 400;
-        const d = 'M -200 ' + yb + ' C 300 ' + yb + ', ' + cx + ' ' + ty + ', 720 ' + ty +
-          ' C ' + (1440 - cx) + ' ' + ty + ', 1140 ' + yb + ', 1640 ' + yb +
-          ' L 1640 ' + (yb + 20) + ' C 1140 ' + (yb + 20) + ', ' + (1440 - cx) + ' ' + by + ', 720 ' + by +
-          ' C ' + cx + ' ' + by + ', 300 ' + (yb + 20) + ', -200 ' + (yb + 20) + ' Z';
-        curvasAtivas.forEach((el) => { if (el) el.setAttribute('d', d); });
+        curveSvg.style.transform = 'scaleY(' + Math.max(0.04, curveP).toFixed(4) + ')';
       }
     }
 

@@ -58,7 +58,7 @@ a{color:#C8F0F8}a:hover{color:#F8C8F8}
 .faq p{padding:0 56px 26px 0;font-size:16px;line-height:1.65;color:#A3A3A3}
 .bcard{flex:none;width:300px;padding:32px;border-radius:28px;background:#0A0A0A;border:1px solid rgba(255,255,255,.1)}
 .ph{color:#F8C8F8;font-family:'Inter Tight',sans-serif;font-size:15px;letter-spacing:0;font-weight:500}
-@media (max-width:760px),(pointer:coarse){.ruido{display:none}[data-ref="CurveSec"]>div:first-child{top:-18vh !important;height:56vh !important}.os [style*="backdrop-filter"]{backdrop-filter:none !important;-webkit-backdrop-filter:none !important}.float{animation:none}.card:hover{transform:none}}
+@media (max-width:760px),(pointer:coarse){.ruido{display:none}.os [style*="backdrop-filter"]{backdrop-filter:none !important;-webkit-backdrop-filter:none !important}.float{animation:none}.card:hover{transform:none}}
 @media (max-width:760px){.navmid{display:none !important}.heroh1{font-size:52px !important}.h2big{font-size:40px !important}.sect{padding-left:16px !important;padding-right:16px !important}.faq p{padding-right:0}}
 @media (prefers-reduced-motion:reduce){.float,.flutua,.pulse,.bob,.marq{animation:none}.rw .w{opacity:1;transform:none}.fade{opacity:1;transform:none}}
 </style>
@@ -130,7 +130,7 @@ a{color:#C8F0F8}a:hover{color:#F8C8F8}
 <!-- PROBLEMAS + CURVA -->
 <section id="problema" data-ref="CurveSec" style="position: relative">
 <div aria-hidden="true" style="pointer-events: none; position: absolute; left: 0; right: 0; top: -40vh; height: 100vh; z-index: 1; overflow: visible">
-<svg viewBox="0 0 1440 800" preserveAspectRatio="none" style="width: 100%; height: 100%; overflow: visible">
+<svg data-ref="CurveSvg" viewBox="0 0 1440 800" preserveAspectRatio="none" style="width: 100%; height: 100%; overflow: visible; transform-origin: 50% 50%; transform: scaleY(0.04); will-change: transform">
 <defs>
 <filter id="ob90" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="90"></feGaussianBlur></filter>
 <filter id="ob60" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="60"></feGaussianBlur></filter>
@@ -139,10 +139,10 @@ a{color:#C8F0F8}a:hover{color:#F8C8F8}
 <linearGradient id="omg" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="black"></stop><stop offset="12%" stop-color="white"></stop><stop offset="88%" stop-color="white"></stop><stop offset="100%" stop-color="black"></stop></linearGradient>
 <mask id="ofade"><rect x="-200" y="-400" width="1840" height="1600" fill="url(#omg)"></rect></mask>
 </defs>
-<path data-ref="C1" filter="url(#ob90)" opacity="0.18" fill="#D890F0"></path>
-<path data-ref="C2" filter="url(#ob60)" opacity="0.2" fill="#90F0F8"></path>
-<path data-ref="C3" filter="url(#ob40)" opacity="0.3" fill="#FFFFFF"></path>
-<path data-ref="C4" fill="url(#ovol)" mask="url(#ofade)"></path>
+<path data-ref="C1" d="M -200 400 C 300 400, 400 -100, 720 -100 C 1040 -100, 1140 400, 1640 400 L 1640 420 C 1140 420, 1040 250, 720 250 C 400 250, 300 420, -200 420 Z" filter="url(#ob90)" opacity="0.18" fill="#D890F0"></path>
+<path data-ref="C2" d="M -200 400 C 300 400, 400 -100, 720 -100 C 1040 -100, 1140 400, 1640 400 L 1640 420 C 1140 420, 1040 250, 720 250 C 400 250, 300 420, -200 420 Z" filter="url(#ob60)" opacity="0.2" fill="#90F0F8"></path>
+<path data-ref="C3" d="M -200 400 C 300 400, 400 -100, 720 -100 C 1040 -100, 1140 400, 1640 400 L 1640 420 C 1140 420, 1040 250, 720 250 C 400 250, 300 420, -200 420 Z" filter="url(#ob40)" opacity="0.3" fill="#FFFFFF"></path>
+<path data-ref="C4" d="M -200 400 C 300 400, 400 -100, 720 -100 C 1040 -100, 1140 400, 1640 400 L 1640 420 C 1140 420, 1040 250, 720 250 C 400 250, 300 420, -200 420 Z" fill="url(#ovol)" mask="url(#ofade)"></path>
 </svg>
 </div>
 <div class="sect" style="position: relative; z-index: 2; padding: 360px 64px 140px; max-width: 1360px; margin: 0 auto">

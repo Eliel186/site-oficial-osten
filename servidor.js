@@ -13,7 +13,8 @@ const TIPOS = {
   '.jpg': 'image/jpeg',
   '.svg': 'image/svg+xml',
   '.webp': 'image/webp',
-  '.ico': 'image/x-icon'
+  '.ico': 'image/x-icon',
+  '.mp4': 'video/mp4'
 };
 
 http.createServer((req, res) => {
@@ -21,9 +22,23 @@ http.createServer((req, res) => {
   if (rota === '/') rota = '/index.html';
   const arquivo = path.normalize(path.join(RAIZ, rota));
   if (!arquivo.startsWith(RAIZ)) { res.writeHead(403); return res.end(); }
-  fs.readFile(arquivo, (erro, dados) => {
-    if (erro) { res.writeHead(404); return res.end('Não encontrado'); }
-    res.writeHead(200, { 'Content-Type': TIPOS[path.extname(arquivo).toLowerCase()] || 'application/octet-stream' });
-    res.end(dados);
+  fs.stat(arquivo, (erro, info) => {
+    if (erro || !info.isFile()) { res.writeHead(404); return res.end('Não encontrado'); }
+    const tipo = TIPOS[path.extname(arquivo).toLowerCase()] || 'application/octet-stream';
+    // Vídeo precisa de "range" para o navegador tocar e repetir em loop
+    const range = req.headers.range && /bytes=(\d*)-(\d*)/.exec(req.headers.range);
+    if (range) {
+      const inicio = range[1] ? parseInt(range[1], 10) : 0;
+      const fim = range[2] ? parseInt(range[2], 10) : info.size - 1;
+      res.writeHead(206, {
+        'Content-Type': tipo,
+        'Content-Range': `bytes ${inicio}-${fim}/${info.size}`,
+        'Accept-Ranges': 'bytes',
+        'Content-Length': fim - inicio + 1
+      });
+      return fs.createReadStream(arquivo, { start: inicio, end: fim }).pipe(res);
+    }
+    res.writeHead(200, { 'Content-Type': tipo, 'Content-Length': info.size, 'Accept-Ranges': 'bytes' });
+    fs.createReadStream(arquivo).pipe(res);
   });
 }).listen(PORTA, () => console.log('Site oficial Osten em http://localhost:' + PORTA));

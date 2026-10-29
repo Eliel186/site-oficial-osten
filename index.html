@@ -217,6 +217,59 @@ a{color:#C8F0F8}a:hover{color:#F8C8F8}
 </div></div>
 </section>
 
+<!-- CAPTAÇÃO (BONECO PESCANDO) -->
+<section id="captacao" class="sect" style="position: relative; padding: 120px 64px 40px; max-width: 1360px; margin: 0 auto">
+<div style="display: flex; flex-wrap: wrap; gap: 48px; align-items: center">
+<div style="flex: 1 1 420px; display: flex; flex-direction: column; gap: 24px">
+<p class="kick fade" data-fade="1">Captação</p>
+<h2 class="rw h2big" data-reveal="1" style="font-family: Sora, sans-serif; font-weight: 600; font-size: 64px; line-height: 1.05; letter-spacing: -.03em">
+<span class="w" style="--i:0">Fisgamos</span><span class="w grad" style="--i:1">quem</span><span class="w grad" style="--i:2">já</span><span class="w grad" style="--i:3">quer</span><span class="w grad" style="--i:4">comprar.</span>
+</h2>
+<p class="fade" data-fade="1" style="font-size: 18px; line-height: 1.6; color: #A3A3A3; max-width: 520px">Anúncio, Google Meu Negócio e SEO local jogam a isca no lugar certo. O lead que chega já procura o que você vende, e a gente puxa até ele virar cliente.</p>
+</div>
+<div class="fade" data-fade="1" style="flex: 1 1 420px; position: relative; display: grid; place-items: center">
+<div aria-hidden="true" style="position: absolute; width: 80%; height: 70%; border-radius: 50%; background: radial-gradient(circle, rgba(216,144,240,.18), rgba(144,240,248,.08) 50%, transparent 72%); filter: blur(50px); pointer-events: none"></div>
+<svg id="pesca-svg" role="img" aria-label="Boneco pescando e fisgando um peixe, representando a captação de leads" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" style="position: relative; width: min(100%, 520px); height: auto; display: block">
+<defs>
+<filter id="pesca-adesivo" x="-25%" y="-25%" width="150%" height="150%">
+<feMorphology in="SourceAlpha" operator="dilate" radius="24" result="dilated"></feMorphology>
+<feGaussianBlur in="dilated" stdDeviation="3" result="blurred"></feGaussianBlur>
+<feComponentTransfer in="blurred" result="rounded-border"><feFuncA type="linear" slope="15" intercept="-6"></feFuncA></feComponentTransfer>
+<feFlood flood-color="#ffffff" result="white-fill"></feFlood>
+<feComposite in="white-fill" in2="rounded-border" operator="in" result="white-sticker"></feComposite>
+<feDropShadow in="white-sticker" dx="0" dy="2" stdDeviation="5" flood-color="#000000" flood-opacity="0.22" result="sticker-with-shadow"></feDropShadow>
+<feMerge><feMergeNode in="sticker-with-shadow"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge>
+</filter>
+</defs>
+<g filter="url(#pesca-adesivo)">
+<path data-pesca="backArm" fill="none" stroke="#000" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"></path>
+<path data-pesca="rodMain" fill="#000"></path>
+<line data-pesca="rodHandle" stroke="#000" stroke-width="11" stroke-linecap="round"></line>
+<path data-pesca="frontLeg" fill="none" stroke="#000" stroke-width="46" stroke-linecap="round" stroke-linejoin="round"></path>
+<path data-pesca="torsoBorder" fill="#000" stroke="#fff" stroke-width="7" stroke-linejoin="round"></path>
+<path data-pesca="backLeg" fill="none" stroke="#000" stroke-width="46" stroke-linecap="round" stroke-linejoin="round"></path>
+<path data-pesca="torsoFill" fill="#000"></path>
+<circle data-pesca="head" r="52" fill="#000"></circle>
+<path data-pesca="frontArmBorder" fill="none" stroke="#fff" stroke-width="50" stroke-linecap="round" stroke-linejoin="round"></path>
+<path data-pesca="frontArm" fill="none" stroke="#000" stroke-width="38" stroke-linecap="round" stroke-linejoin="round"></path>
+<path data-pesca="rodOverlapWhite" fill="none" stroke="#fff" stroke-width="16" stroke-linecap="round"></path>
+<path data-pesca="rodOverlapBlack" fill="none" stroke="#000" stroke-width="9" stroke-linecap="round"></path>
+<path data-pesca="frontHand" fill="none" stroke="#000" stroke-width="38" stroke-linecap="round" stroke-linejoin="round"></path>
+<path data-pesca="fishingLine" fill="none" stroke="#000" stroke-width="4.5" stroke-linecap="round"></path>
+<g data-pesca="fishGroup" opacity="0">
+<path d="M 0 0 C 20 22, 38 64, 34 110 C 32 124, 31 134, 33 142 L 22 128 C 14 154, 8 170, 12 180 L 37 214 L 3 196 L -32 214 L -7 180 C -3 170, -10 150, -22 110 L -32 122 C -35 92, -35 58, -20 30 C -13 16, -6 7, 0 0 Z" fill="#000"></path>
+</g>
+<g data-pesca="waterEffects" opacity="0">
+<ellipse data-pesca="waterRing1" fill="none" stroke="#000" stroke-linecap="round"></ellipse>
+<ellipse data-pesca="waterRing2" fill="none" stroke="#000" stroke-linecap="round"></ellipse>
+<ellipse data-pesca="waterRing3" fill="none" stroke="#000" stroke-linecap="round"></ellipse>
+</g>
+</g>
+</svg>
+</div>
+</div>
+</section>
+
 <!-- MÉTODO -->
 <section id="metodo" class="sect" style="position: relative; padding: 140px 64px; max-width: 1360px; margin: 0 auto">
 <div aria-hidden="true" style="position: absolute; left: -10%; top: 0; width: 420px; height: 420px; border-radius: 50%; background: radial-gradient(circle, rgba(216,144,240,.14), transparent 70%); filter: blur(30px); pointer-events: none"></div>
@@ -260,6 +313,30 @@ a{color:#C8F0F8}a:hover{color:#F8C8F8}
 </ul>
 <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.08)"><p style="font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: #8A8A8A">Métrica mestra</p><p style="margin-top: 6px; font-size: 17px; font-weight: 500">Permanência média, em meses</p></div>
 </div></div>
+</div>
+</section>
+
+<!-- TERRENO BALDIO (VÍDEO DA PLANTA) -->
+<section id="solo" class="sect" style="position: relative; padding: 120px 64px; max-width: 1360px; margin: 0 auto">
+<div aria-hidden="true" style="position: absolute; left: -8%; top: 30%; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(216,144,240,.12), transparent 70%); filter: blur(30px); pointer-events: none"></div>
+<div style="position: relative; display: flex; flex-wrap: wrap; gap: 64px; align-items: center">
+<div style="flex: 1 1 460px; display: flex; flex-direction: column; gap: 28px">
+<p class="kick fade" data-fade="1">O solo antes da semente</p>
+<h2 class="rw h2big" data-reveal="1" style="font-family: Sora, sans-serif; font-weight: 600; font-size: 60px; line-height: 1.06; letter-spacing: -.03em">
+<span class="w" style="--i:0">Tráfego</span><span class="w" style="--i:1">em</span><span class="w grad" style="--i:2">terreno</span><span class="w grad" style="--i:3">baldio</span><span class="w" style="--i:4">não</span><span class="w" style="--i:5">produz</span><span class="w" style="--i:6">nada.</span>
+</h2>
+<p class="fade" data-fade="1" style="font-size: 18px; line-height: 1.65; color: #A3A3A3; max-width: 560px">A maioria das agências joga anúncio em perfil abandonado e espera colheita. Na Osten, cuidamos do solo primeiro: o seu negócio não é um pacote de serviços soltos, é um único sistema em que cada parte alimenta a outra.</p>
+<ol class="fade" data-fade="1" style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; border-top: 1px solid rgba(255,255,255,.08)">
+<li style="display: flex; gap: 20px; align-items: baseline; padding: 18px 0; border-bottom: 1px solid rgba(255,255,255,.08)"><span class="grad" style="flex: none; width: 36px; font-family: Sora, sans-serif; font-weight: 300; font-size: 22px">01</span><p style="font-size: 17px; line-height: 1.5"><strong style="font-weight: 600">Google Meu Negócio</strong> <span style="color: #A3A3A3">gera confiança em quem te encontra.</span></p></li>
+<li style="display: flex; gap: 20px; align-items: baseline; padding: 18px 0; border-bottom: 1px solid rgba(255,255,255,.08)"><span class="grad" style="flex: none; width: 36px; font-family: Sora, sans-serif; font-weight: 300; font-size: 22px">02</span><p style="font-size: 17px; line-height: 1.5"><strong style="font-weight: 600">Instagram</strong> <span style="color: #A3A3A3">sustenta essa confiança.</span></p></li>
+<li style="display: flex; gap: 20px; align-items: baseline; padding: 18px 0; border-bottom: 1px solid rgba(255,255,255,.08)"><span class="grad" style="flex: none; width: 36px; font-family: Sora, sans-serif; font-weight: 300; font-size: 22px">03</span><p style="font-size: 17px; line-height: 1.5"><strong style="font-weight: 600">Tráfego pago</strong> <span style="color: #A3A3A3">traz o volume certo de contatos.</span></p></li>
+<li style="display: flex; gap: 20px; align-items: baseline; padding: 18px 0; border-bottom: 1px solid rgba(255,255,255,.08)"><span class="grad" style="flex: none; width: 36px; font-family: Sora, sans-serif; font-weight: 300; font-size: 22px">04</span><p style="font-size: 17px; line-height: 1.5"><strong style="font-weight: 600">Atendimento</strong> <span style="color: #A3A3A3">transforma esse volume em cliente.</span></p></li>
+</ol>
+<p class="fade" data-fade="1" style="font-size: 17px; line-height: 1.6; color: #D4D4D4; max-width: 560px">Quando uma parte falha, o sistema inteiro sente. Por isso não vendemos peças soltas: <span class="grad" style="font-weight: 600">construímos o organismo completo</span> que faz o seu negócio crescer.</p>
+</div>
+<div class="fade" data-fade="1" style="flex: 1.1 1 420px; position: relative">
+<video src="assets/planta-nascendo.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Planta nascendo da terra" style="display: block; width: 100%; height: auto; object-fit: contain"></video>
+</div>
 </div>
 </section>
 
@@ -460,5 +537,6 @@ a{color:#C8F0F8}a:hover{color:#F8C8F8}
 </footer>
 </div>
 <script src="script.js"></script>
+<script src="pesca.js"></script>
 </body>
 </html>

@@ -58,6 +58,7 @@ a{color:#C8F0F8}a:hover{color:#F8C8F8}
 .faq p{padding:0 56px 26px 0;font-size:16px;line-height:1.65;color:#A3A3A3}
 .bcard{flex:none;width:300px;padding:32px;border-radius:28px;background:#0A0A0A;border:1px solid rgba(255,255,255,.1)}
 .ph{color:#F8C8F8;font-family:'Inter Tight',sans-serif;font-size:15px;letter-spacing:0;font-weight:500}
+@media (max-width:760px),(pointer:coarse){.ruido{display:none}[data-ref="CurveSec"]>div:first-child{top:-18vh !important;height:56vh !important}.os [style*="backdrop-filter"]{backdrop-filter:none !important;-webkit-backdrop-filter:none !important}.float{animation:none}.card:hover{transform:none}}
 @media (max-width:760px){.navmid{display:none !important}.heroh1{font-size:52px !important}.h2big{font-size:40px !important}.sect{padding-left:16px !important;padding-right:16px !important}.faq p{padding-right:0}}
 @media (prefers-reduced-motion:reduce){.float,.flutua,.pulse,.bob,.marq{animation:none}.rw .w{opacity:1;transform:none}.fade{opacity:1;transform:none}}
 </style>
@@ -65,7 +66,7 @@ a{color:#C8F0F8}a:hover{color:#F8C8F8}
 <body>
 <div class="os" data-ref="Root" style="position: relative; background: #000; color: #fff; font-family: 'Inter Tight', system-ui, sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased">
 
-<div aria-hidden="true" style="pointer-events: none; position: fixed; inset: 0; z-index: 60; opacity: 0.04; background-image: radial-gradient(circle, rgba(255,255,255,1) 0.8px, transparent 0.8px); background-size: 3px 3px"></div>
+<div class="ruido" aria-hidden="true" style="pointer-events: none; position: fixed; inset: 0; z-index: 60; opacity: 0.04; background-image: radial-gradient(circle, rgba(255,255,255,1) 0.8px, transparent 0.8px); background-size: 3px 3px"></div>
 
 <header style="position: fixed; top: 20px; left: 0; right: 0; z-index: 50; display: flex; align-items: center; justify-content: space-between; padding: 0 32px; pointer-events: none">
 <a href="#topo" style="pointer-events: auto; display: flex; align-items: center" aria-label="Osten, voltar ao início">
@@ -335,7 +336,7 @@ a{color:#C8F0F8}a:hover{color:#F8C8F8}
 <p class="fade" data-fade="1" style="font-size: 17px; line-height: 1.6; color: #D4D4D4; max-width: 560px">Quando uma parte falha, o sistema inteiro sente. Por isso não vendemos peças soltas: <span class="grad" style="font-weight: 600">construímos o organismo completo</span> que faz o seu negócio crescer.</p>
 </div>
 <div class="fade" data-fade="1" style="flex: 1.1 1 420px; position: relative">
-<video src="assets/planta-nascendo.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Planta nascendo da terra" style="display: block; width: 100%; height: auto; object-fit: contain"></video>
+<video data-src="assets/planta-nascendo.mp4" muted loop playsinline preload="none" width="720" height="1280" aria-label="Planta nascendo da terra" style="display: block; width: 100%; height: auto; object-fit: contain"></video>
 </div>
 </div>
 </section>
@@ -412,7 +413,7 @@ a{color:#C8F0F8}a:hover{color:#F8C8F8}
 </div>
 <div class="fade" data-fade="1" style="flex: 1 1 420px; position: relative; min-height: 560px; display: grid; place-items: center">
 <div aria-hidden="true" style="position: absolute; width: 70%; height: 60%; border-radius: 50%; background: radial-gradient(circle, rgba(216,144,240,.22), rgba(144,240,248,.10) 50%, transparent 72%); filter: blur(50px); pointer-events: none"></div>
-<img class="flutua" src="assets/escultura-vidro-recorte.webp" alt="" style="position: relative; width: min(100%, 440px); height: auto; filter: drop-shadow(0 30px 60px rgba(216,144,240,.25))">
+<img class="flutua" src="assets/escultura-vidro-recorte.webp" alt="" loading="lazy" decoding="async" width="1000" height="1339" style="position: relative; width: min(100%, 440px); height: auto; filter: drop-shadow(0 30px 60px rgba(216,144,240,.25))">
 </div>
 </div>
 </section>

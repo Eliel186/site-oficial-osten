@@ -13,55 +13,84 @@
   const curveSec = ref('CurveSec');
   const curves = ['C1', 'C2', 'C3', 'C4'].map(ref);
   const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Celular: menos linhas nas ondas, 30 quadros por segundo e sem as camadas de brilho da curva
+  const mobile = window.matchMedia && window.matchMedia('(max-width: 760px), (pointer: coarse)').matches;
   const WHATSAPP = '5512996013011';
 
   if (root && !reduce) root.classList.add('anim');
 
+  // Liga e desliga cada efeito conforme ele entra ou sai da tela
+  const visivel = new Map();
+  const io = 'IntersectionObserver' in window
+    ? new IntersectionObserver((entries) => {
+        entries.forEach((e) => visivel.set(e.target, e.isIntersecting));
+        acordar();
+      }, { rootMargin: '200px 0px' })
+    : null;
+  const observar = (el) => { if (!el) return; visivel.set(el, !io); if (io) io.observe(el); };
+  const naTela = (el) => !!el && visivel.get(el) === true;
+
   // ---------- ondas interativas da hero ----------
   const mouse = { x: -1000, y: -1000 };
   const target = { x: -1000, y: -1000 };
+  let waveRect = null;
   function onMove(e) {
-    if (!wave) return;
-    const r = wave.getBoundingClientRect();
+    if (!wave || !naTela(hero)) return;
     const t = e.touches ? e.touches[0] : e;
-    target.x = t.clientX - r.left;
-    target.y = t.clientY - r.top;
+    if (!waveRect) waveRect = wave.getBoundingClientRect();
+    target.x = t.clientX - waveRect.left;
+    target.y = t.clientY - waveRect.top;
   }
   window.addEventListener('mousemove', onMove, { passive: true });
   window.addEventListener('touchmove', onMove, { passive: true });
+  window.addEventListener('resize', () => { waveRect = null; waveSize = null; }, { passive: true });
 
-  function drawWaves() {
-    if (!wave) return;
+  const LINES = mobile ? 8 : 15;
+  const SEGS = mobile ? 40 : 100;
+  let waveSize = null, ctx = null, gradients = [];
+  function prepWaves() {
     const w = wave.clientWidth, h = wave.clientHeight;
-    if (!w || !h) return;
-    if (wave.width !== w || wave.height !== h) { wave.width = w; wave.height = h; }
-    const ctx = wave.getContext('2d');
-    ctx.clearRect(0, 0, w, h);
-    mouse.x += (target.x - mouse.x) * 0.1;
-    mouse.y += (target.y - mouse.y) * 0.1;
-    const time = reduce ? 0 : Date.now() * 0.02;
-    const lines = 15, segs = 100, amp = 40, rad = 150, str = 80;
-    for (let i = 0; i < lines; i++) {
-      const baseY = (h / lines) * i + h / lines / 2;
-      const off = i * 0.5;
-      const op = 0.05 + (i / lines) * 0.22;
+    if (!w || !h) return false;
+    wave.width = w;
+    wave.height = h;
+    ctx = wave.getContext('2d');
+    // Os degradês só mudam com o tamanho: criados uma vez, não a cada quadro
+    gradients = [];
+    for (let i = 0; i < LINES; i++) {
+      const op = 0.05 + (i / LINES) * 0.22;
       const g = ctx.createLinearGradient(0, 0, w, 0);
       g.addColorStop(0, 'rgba(248,200,248,' + op + ')');
       g.addColorStop(0.5, 'rgba(170,170,170,' + op + ')');
       g.addColorStop(1, 'rgba(200,240,248,' + op + ')');
+      gradients.push(g);
+    }
+    waveSize = { w, h };
+    return true;
+  }
+
+  function drawWaves() {
+    if (!wave) return;
+    if (!waveSize && !prepWaves()) return;
+    const { w, h } = waveSize;
+    ctx.clearRect(0, 0, w, h);
+    mouse.x += (target.x - mouse.x) * 0.1;
+    mouse.y += (target.y - mouse.y) * 0.1;
+    const time = reduce ? 0 : Date.now() * 0.02;
+    const amp = 40, rad = 150, str = 80;
+    for (let i = 0; i < LINES; i++) {
+      const baseY = (h / LINES) * i + h / LINES / 2;
+      const off = i * 0.5;
       ctx.beginPath();
-      ctx.lineWidth = 1 + i / 5;
-      ctx.strokeStyle = g;
-      for (let x = 0; x <= segs; x++) {
-        const xp = (w / segs) * x;
-        let yp = baseY + Math.sin(x * 0.1 + time * 0.05 + off) * amp;
-        yp += Math.cos(x * 0.05 - time * 0.03) * (amp / 2);
+      ctx.lineWidth = 1 + (i * 15 / LINES) / 5;
+      ctx.strokeStyle = gradients[i];
+      for (let x = 0; x <= SEGS; x++) {
+        const k = (x / SEGS) * 100;
+        const xp = (w / SEGS) * x;
+        let yp = baseY + Math.sin(k * 0.1 + time * 0.05 + off) * amp;
+        yp += Math.cos(k * 0.05 - time * 0.03) * (amp / 2);
         const dx = xp - mouse.x, dy = yp - mouse.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < rad) {
-          const f = (rad - dist) / rad;
-          yp += Math.sin(Math.atan2(dy, dx)) * f * str;
-        }
+        if (dist < rad) yp += (dy / (dist || 1)) * ((rad - dist) / rad) * str;
         if (x === 0) ctx.moveTo(xp, yp); else ctx.lineTo(xp, yp);
       }
       ctx.stroke();
@@ -70,88 +99,147 @@
 
   // ---------- efeitos ligados ao scroll ----------
   let curveP = 0;
-  const reveals = root ? root.querySelectorAll('[data-reveal]') : [];
-  const fades = root ? root.querySelectorAll('[data-fade]') : [];
+  const reveals = root ? Array.from(root.querySelectorAll('[data-reveal]')) : [];
+  const lastP = new Map();
   const drawWrap = root && root.querySelector('[data-draw-wrap]');
   const drawPath = root && root.querySelector('[data-draw]');
   const hSec = root && root.querySelector('[data-hsec]');
   const hTrack = root && root.querySelector('[data-htrack]');
+  let hMax = null;
+  window.addEventListener('resize', () => { hMax = null; }, { passive: true });
 
-  function frame() {
+  // Camadas de brilho desfocado da curva pesam demais no celular
+  if (mobile) curves.slice(0, 3).forEach((el) => { if (el) el.style.display = 'none'; });
+  const curvasAtivas = mobile ? curves.slice(3) : curves;
+
+  [hero, curveSec, drawWrap, hSec].concat(reveals).forEach(observar);
+
+  // Blocos que aparecem ao entrar na tela: o navegador avisa, sem medir a cada quadro
+  const fades = root ? root.querySelectorAll('[data-fade]') : [];
+  if (io && !reduce) {
+    const ioFade = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); ioFade.unobserve(e.target); } });
+    }, { rootMargin: '0px 0px -12% 0px' });
+    fades.forEach((el) => ioFade.observe(el));
+  } else {
+    fades.forEach((el) => el.classList.add('in'));
+  }
+
+  let raf = 0, ultimo = 0, scrollY = window.scrollY;
+  const intervalo = mobile ? 1000 / 30 : 0;
+
+  function frame(now) {
+    raf = 0;
+    if (intervalo && now - ultimo < intervalo - 2) { pedirQuadro(); return; }
+    ultimo = now;
     const vh = window.innerHeight || 900;
-    drawWaves();
+    let continuar = false;
 
-    // hero: parallax e fade
-    let scrolled = 0;
-    if (hero) {
-      scrolled = Math.max(0, -hero.getBoundingClientRect().top);
-      if (heroInner && !reduce) {
-        const k = Math.min(1, scrolled / ((hero.offsetHeight || vh) * 0.8));
-        heroInner.style.transform = 'translateY(' + (scrolled * 0.25) + 'px)';
-        heroInner.style.opacity = String(1 - k);
-      }
+    // 1) Lê todas as posições primeiro
+    const heroOn = naTela(hero);
+    const heroTop = hero ? hero.getBoundingClientRect().top : 0;
+    const heroH = hero ? hero.offsetHeight || vh : vh;
+    const curveTop = curveSec && naTela(curveSec) ? curveSec.getBoundingClientRect().top : null;
+    const revealTops = reveals.map((el) => (naTela(el) ? el.getBoundingClientRect().top : null));
+    const drawTop = drawWrap && naTela(drawWrap) ? drawWrap.getBoundingClientRect().top : null;
+    let hRect = null;
+    if (hSec && hTrack && naTela(hSec)) {
+      hRect = hSec.getBoundingClientRect();
+      if (hMax === null) hMax = Math.max(0, hTrack.scrollWidth - hSec.clientWidth);
+    }
+
+    // 2) Depois escreve
+    if (heroOn) {
+      drawWaves();
+      continuar = !reduce;
+    }
+    const scrolled = Math.max(0, -heroTop);
+    if (heroInner && !reduce && scrolled < heroH * 1.2) {
+      const k = Math.min(1, scrolled / (heroH * 0.8));
+      heroInner.style.transform = 'translate3d(0,' + (scrolled * 0.25) + 'px,0)';
+      heroInner.style.opacity = String(1 - k);
     }
 
     // menu em pílula que encolhe até virar a estrela
     if (nav && navInner) {
       const p = Math.min(scrolled, 300) / 300;
-      const full = navInner.scrollWidth + 16;
-      nav.style.width = (56 + (full - 56) * (1 - p)) + 'px';
-      nav.style.borderRadius = (50 - p * 22) + 'px';
-      navInner.style.opacity = String(Math.max(0, 1 - p * 5));
-      navInner.style.pointerEvents = p > 0.8 ? 'none' : 'auto';
-      if (star) {
-        star.style.opacity = String(Math.max(0, (p - 0.5) * 2));
-        star.style.transform = 'scale(' + (0.5 + p * 0.5) + ')';
+      if (p !== frame.navP) {
+        frame.navP = p;
+        if (!frame.navFull) frame.navFull = navInner.scrollWidth + 16;
+        nav.style.width = (56 + (frame.navFull - 56) * (1 - p)) + 'px';
+        nav.style.borderRadius = (50 - p * 22) + 'px';
+        navInner.style.opacity = String(Math.max(0, 1 - p * 5));
+        navInner.style.pointerEvents = p > 0.8 ? 'none' : 'auto';
+        if (star) {
+          star.style.opacity = String(Math.max(0, (p - 0.5) * 2));
+          star.style.transform = 'scale(' + (0.5 + p * 0.5) + ')';
+        }
+        if (logo) logo.style.height = (34 - p * 8) + 'px';
       }
     }
-    if (logo) logo.style.height = (34 - Math.min(scrolled, 300) / 300 * 8) + 'px';
 
     // curva volumétrica que dobra com o scroll
-    if (curveSec && curves[3]) {
-      const top = curveSec.getBoundingClientRect().top;
-      const t = Math.max(0, Math.min(1, 1 - (top - vh * 0.4) / vh));
+    if (curveTop !== null) {
+      const t = Math.max(0, Math.min(1, 1 - (curveTop - vh * 0.4) / vh));
+      const antes = curveP;
       curveP += (t - curveP) * 0.18;
-      const p = curveP;
-      const yb = 400, ty = yb - p * 500, by = yb - p * 150, cx = 400;
-      const d = 'M -200 ' + yb + ' C 300 ' + yb + ', ' + cx + ' ' + ty + ', 720 ' + ty +
-        ' C ' + (1440 - cx) + ' ' + ty + ', 1140 ' + yb + ', 1640 ' + yb +
-        ' L 1640 ' + (yb + 20) + ' C 1140 ' + (yb + 20) + ', ' + (1440 - cx) + ' ' + by + ', 720 ' + by +
-        ' C ' + cx + ' ' + by + ', 300 ' + (yb + 20) + ', -200 ' + (yb + 20) + ' Z';
-      curves.forEach((el) => { if (el) el.setAttribute('d', d); });
+      if (Math.abs(t - curveP) > 0.001) continuar = true;
+      if (Math.abs(curveP - antes) > 0.0005 || !frame.curvaDesenhada) {
+        frame.curvaDesenhada = true;
+        const p = curveP;
+        // No celular a curva é espremida na largura: dobra menos para não virar um pico sobre o texto
+        const amp = mobile ? 0.3 : 1;
+        const yb = 400, ty = yb - p * 500 * amp, by = yb - p * 150 * amp, cx = 400;
+        const d = 'M -200 ' + yb + ' C 300 ' + yb + ', ' + cx + ' ' + ty + ', 720 ' + ty +
+          ' C ' + (1440 - cx) + ' ' + ty + ', 1140 ' + yb + ', 1640 ' + yb +
+          ' L 1640 ' + (yb + 20) + ' C 1140 ' + (yb + 20) + ', ' + (1440 - cx) + ' ' + by + ', 720 ' + by +
+          ' C ' + cx + ' ' + by + ', 300 ' + (yb + 20) + ', -200 ' + (yb + 20) + ' Z';
+        curvasAtivas.forEach((el) => { if (el) el.setAttribute('d', d); });
+      }
     }
 
     // palavras que sobem uma a uma
     for (let i = 0; i < reveals.length; i++) {
-      const t = reveals[i].getBoundingClientRect().top;
-      const p = reduce ? 1 : Math.max(0, Math.min(1, (vh * 0.95 - t) / (vh * 0.6)));
-      reveals[i].style.setProperty('--p', p.toFixed(3));
-    }
-
-    // blocos que aparecem ao entrar na tela
-    for (let i = 0; i < fades.length; i++) {
-      if (fades[i].getBoundingClientRect().top < vh * 0.88) fades[i].classList.add('in');
+      if (revealTops[i] === null) continue;
+      const p = reduce ? 1 : Math.max(0, Math.min(1, (vh * 0.95 - revealTops[i]) / (vh * 0.6)));
+      const v = p.toFixed(3);
+      if (lastP.get(reveals[i]) !== v) { lastP.set(reveals[i], v); reveals[i].style.setProperty('--p', v); }
     }
 
     // linha do sistema que se desenha
-    if (drawWrap && drawPath) {
-      const t = drawWrap.getBoundingClientRect().top;
-      const p = reduce ? 1 : Math.max(0, Math.min(1, (vh * 0.85 - t) / (vh * 0.5)));
+    if (drawTop !== null) {
+      const p = reduce ? 1 : Math.max(0, Math.min(1, (vh * 0.85 - drawTop) / (vh * 0.5)));
       drawPath.setAttribute('stroke-dashoffset', String(1 - p));
     }
 
-    // trilho de benefícios e imagens que anda para a direita com o scroll
-    if (hSec && hTrack) {
-      const r = hSec.getBoundingClientRect();
-      const p = Math.max(0, Math.min(1, (vh - r.top) / (vh + r.height)));
+    // trilho de benefícios que anda para a direita com o scroll
+    if (hRect) {
+      const p = Math.max(0, Math.min(1, (vh - hRect.top) / (vh + hRect.height)));
       const q = Math.max(0, Math.min(1, p * 1.4 - 0.2));
-      const max = Math.max(0, hTrack.scrollWidth - hSec.clientWidth);
-      hTrack.style.transform = 'translateX(' + (-(1 - q) * max) + 'px)';
+      hTrack.style.transform = 'translate3d(' + (-(1 - q) * hMax) + 'px,0,0)';
     }
 
-    requestAnimationFrame(frame);
+    // Só continua animando sozinho enquanto há algo se mexendo (ondas ou curva assentando)
+    if (continuar) pedirQuadro();
   }
-  requestAnimationFrame(frame);
+
+  function pedirQuadro() { if (!raf) raf = requestAnimationFrame(frame); }
+  function acordar() { pedirQuadro(); }
+  window.addEventListener('scroll', () => { if (window.scrollY !== scrollY) { scrollY = window.scrollY; acordar(); } }, { passive: true });
+  window.addEventListener('resize', acordar, { passive: true });
+  acordar();
+
+  // ---------- vídeo da planta: só baixa e toca quando chega perto da tela ----------
+  document.querySelectorAll('video[data-src]').forEach((v) => {
+    const carregar = () => { if (!v.src) { v.src = v.getAttribute('data-src'); } };
+    if (!io) { carregar(); v.play && v.play().catch(() => {}); return; }
+    new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) { carregar(); const p = v.play(); if (p) p.catch(() => {}); }
+        else if (!v.paused) v.pause();
+      });
+    }, { rootMargin: '0px 0px 80px 0px' }).observe(v);
+  });
 
   // ---------- formulário de análise em 4 etapas ----------
   const questions = [

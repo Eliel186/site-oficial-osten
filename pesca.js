@@ -5,6 +5,19 @@
   const els = {};
   svg.querySelectorAll('[data-pesca]').forEach((el) => { els[el.getAttribute('data-pesca')] = el; });
   const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const mobile = window.matchMedia && window.matchMedia('(max-width: 760px), (pointer: coarse)').matches;
+
+  // No celular o adesivo fica sem desfoque e sem sombra: o filtro é recalculado a cada quadro e pesa
+  if (mobile) {
+    const filtro = svg.querySelector('#pesca-adesivo');
+    if (filtro) {
+      filtro.innerHTML =
+        '<feMorphology in="SourceAlpha" operator="dilate" radius="22" result="d"></feMorphology>' +
+        '<feFlood flood-color="#ffffff" result="w"></feFlood>' +
+        '<feComposite in="w" in2="d" operator="in" result="s"></feComposite>' +
+        '<feMerge><feMergeNode in="s"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge>';
+    }
+  }
 
   // Poses-chave (coordenadas articuladas para interpolação suave)
   const POSES = {
@@ -186,15 +199,19 @@
   if (reduce) { render(POSES.pullHard, 0, 4.5); return; }
 
   // Só anima quando a seção está na tela
-  let visible = false, raf = 0;
+  let visible = false, raf = 0, ultimo = 0;
+  const intervalo = mobile ? 1000 / 30 : 0;
   function loop(now) {
     if (!visible) { raf = 0; return; }
-    render(poseAt((now / 1000) % CYCLE), now / 1000, (now / 1000) % CYCLE);
+    if (!intervalo || now - ultimo >= intervalo - 2) {
+      ultimo = now;
+      render(poseAt((now / 1000) % CYCLE), now / 1000, (now / 1000) % CYCLE);
+    }
     raf = requestAnimationFrame(loop);
   }
   render(POSES.pullHard, 0, 4.5);
   new IntersectionObserver((entries) => {
     visible = entries[0].isIntersecting;
     if (visible && !raf) raf = requestAnimationFrame(loop);
-  }, { rootMargin: '100px' }).observe(svg);
+  }, { rootMargin: '0px' }).observe(svg);
 })();

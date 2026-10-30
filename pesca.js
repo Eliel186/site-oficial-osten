@@ -1,4 +1,4 @@
-// Boneco pescando: representa a captação do lead. Ciclo de 6,5 s: espera, arremessa, fisga e puxa o peixe.
+// Boneco pescando: representa a captação do lead. Ciclo de 6,5 s: ginga, arremessa com o corpo, fisga e puxa o peixe.
 (function () {
   const svg = document.getElementById('pesca-svg');
   if (!svg) return;
@@ -19,47 +19,47 @@
     }
   }
 
-  // Poses-chave (coordenadas articuladas para interpolação suave)
+  // Poses-chave (coordenadas articuladas para interpolação suave; spineBend curva a coluna)
   const POSES = {
-    // Relaxado, segurando a vara
+    // Desleixado, com gingado relaxado
     slouched: {
-      head: [312, 302], torsoTop: [248, 355], torsoShoulder: [316, 370], hipFront: [310, 478], hipBack: [218, 490],
-      fKnee: [365, 582], fFoot: [372, 704], bKnee: [288, 600], bFoot: [248, 720],
-      bArmShoulder: [305, 378], bArmElbow: [358, 434], bArmHand: [418, 405],
-      fArmShoulder: [245, 382], fArmElbow: [262, 456], fArmHand: [375, 432],
-      rodButt: [330, 460], rodGrip: [418, 405], rodCtrl1: [495, 358], rodCtrl2: [575, 315], rodTip: [655, 280],
-      lineC1: [655, 355], lineC2: [650, 445], lineEnd: [648, 540], fishScale: 0, fishRot: 0
+      head: [330, 312], torsoTop: [262, 362], torsoShoulder: [328, 376], hipFront: [306, 480], hipBack: [214, 492], spineBend: -20,
+      fKnee: [368, 586], fFoot: [372, 704], bKnee: [282, 604], bFoot: [248, 720],
+      bArmShoulder: [316, 384], bArmElbow: [365, 442], bArmHand: [425, 415],
+      fArmShoulder: [256, 388], fArmElbow: [272, 462], fArmHand: [382, 442],
+      rodButt: [338, 468], rodGrip: [425, 415], rodCtrl1: [502, 368], rodCtrl2: [582, 326], rodTip: [662, 292],
+      lineC1: [662, 365], lineC2: [656, 452], lineEnd: [652, 545], fishScale: 0, fishRot: 0
     },
-    // Impulso para trás
+    // Impulso exagerado: coluna arqueada para trás, peito aberto
     windup: {
-      head: [282, 292], torsoTop: [228, 348], torsoShoulder: [298, 362], hipFront: [306, 476], hipBack: [214, 488],
-      fKnee: [368, 578], fFoot: [376, 704], bKnee: [292, 602], bFoot: [248, 720],
-      bArmShoulder: [288, 368], bArmElbow: [342, 378], bArmHand: [345, 305],
-      fArmShoulder: [222, 372], fArmElbow: [235, 422], fArmHand: [322, 352],
-      rodButt: [298, 400], rodGrip: [345, 305], rodCtrl1: [305, 220], rodCtrl2: [245, 140], rodTip: [175, 75],
-      lineC1: [140, 125], lineC2: [125, 185], lineEnd: [135, 245], fishScale: 0, fishRot: 0
+      head: [188, 286], torsoTop: [176, 354], torsoShoulder: [246, 344], hipFront: [330, 468], hipBack: [238, 484], spineBend: 28,
+      fKnee: [392, 574], fFoot: [382, 704], bKnee: [305, 594], bFoot: [248, 720],
+      bArmShoulder: [236, 350], bArmElbow: [278, 328], bArmHand: [265, 248],
+      fArmShoulder: [182, 372], fArmElbow: [188, 398], fArmHand: [248, 298],
+      rodButt: [232, 345], rodGrip: [265, 248], rodCtrl1: [215, 165], rodCtrl2: [148, 102], rodTip: [75, 65],
+      lineC1: [55, 125], lineC2: [62, 195], lineEnd: [88, 255], fishScale: 0, fishRot: 0
     },
-    // Arremesso
+    // Arremesso: projeta o corpo e a coluna para frente
     castThrow: {
-      head: [322, 292], torsoTop: [255, 348], torsoShoulder: [324, 365], hipFront: [312, 476], hipBack: [220, 488],
-      fKnee: [374, 576], fFoot: [380, 704], bKnee: [292, 600], bFoot: [248, 720],
-      bArmShoulder: [312, 372], bArmElbow: [372, 405], bArmHand: [435, 345],
-      fArmShoulder: [248, 376], fArmElbow: [268, 438], fArmHand: [396, 382],
-      rodButt: [358, 418], rodGrip: [435, 345], rodCtrl1: [520, 265], rodCtrl2: [615, 215], rodTip: [690, 195],
-      lineC1: [715, 275], lineC2: [705, 420], lineEnd: [685, 565], fishScale: 0, fishRot: 0
+      head: [376, 286], torsoTop: [298, 342], torsoShoulder: [366, 362], hipFront: [316, 474], hipBack: [224, 486], spineBend: -28,
+      fKnee: [396, 572], fFoot: [388, 704], bKnee: [298, 596], bFoot: [248, 720],
+      bArmShoulder: [354, 368], bArmElbow: [418, 396], bArmHand: [484, 336],
+      fArmShoulder: [292, 370], fArmElbow: [322, 434], fArmHand: [442, 375],
+      rodButt: [400, 412], rodGrip: [484, 336], rodCtrl1: [565, 248], rodCtrl2: [642, 198], rodTip: [712, 188],
+      lineC1: [730, 270], lineC2: [712, 420], lineEnd: [685, 565], fishScale: 0, fishRot: 0
     },
-    // Sente a fisgada
+    // Postura firme e preparada
     ready: {
-      head: [288, 282], torsoTop: [232, 345], torsoShoulder: [302, 360], hipFront: [306, 474], hipBack: [215, 486],
-      fKnee: [378, 576], fFoot: [384, 704], bKnee: [292, 595], bFoot: [248, 720],
-      bArmShoulder: [295, 368], bArmElbow: [358, 412], bArmHand: [405, 342],
-      fArmShoulder: [222, 372], fArmElbow: [235, 442], fArmHand: [372, 388],
-      rodButt: [335, 438], rodGrip: [405, 342], rodCtrl1: [478, 245], rodCtrl2: [572, 175], rodTip: [648, 145],
+      head: [282, 266], torsoTop: [232, 334], torsoShoulder: [302, 348], hipFront: [308, 472], hipBack: [216, 484], spineBend: 6,
+      fKnee: [384, 570], fFoot: [386, 704], bKnee: [296, 594], bFoot: [248, 720],
+      bArmShoulder: [295, 356], bArmElbow: [356, 404], bArmHand: [408, 334],
+      fArmShoulder: [224, 360], fArmElbow: [240, 434], fArmHand: [374, 380],
+      rodButt: [336, 430], rodGrip: [408, 334], rodCtrl1: [482, 238], rodCtrl2: [575, 168], rodTip: [650, 140],
       lineC1: [625, 255], lineC2: [608, 410], lineEnd: [598, 540], fishScale: 0.85, fishRot: -8
     },
-    // Puxando com força
+    // Puxando com força (a pose da imagem original)
     pullHard: {
-      head: [258, 285], torsoTop: [212, 346], torsoShoulder: [285, 362], hipFront: [304, 472], hipBack: [208, 486],
+      head: [258, 285], torsoTop: [212, 346], torsoShoulder: [285, 362], hipFront: [304, 472], hipBack: [208, 486], spineBend: 8,
       fKnee: [378, 565], fFoot: [386, 704], bKnee: [304, 608], bFoot: [248, 720],
       bArmShoulder: [285, 370], bArmElbow: [348, 415], bArmHand: [385, 335],
       fArmShoulder: [206, 373], fArmElbow: [218, 446], fArmHand: [355, 385],
@@ -68,7 +68,7 @@
     },
     // Puxada máxima
     pullPeak: {
-      head: [242, 290], torsoTop: [198, 350], torsoShoulder: [272, 366], hipFront: [300, 474], hipBack: [202, 488],
+      head: [242, 290], torsoTop: [198, 350], torsoShoulder: [272, 366], hipFront: [300, 474], hipBack: [202, 488], spineBend: 16,
       fKnee: [378, 568], fFoot: [386, 704], bKnee: [300, 612], bFoot: [248, 720],
       bArmShoulder: [272, 374], bArmElbow: [338, 418], bArmHand: [374, 338],
       fArmShoulder: [194, 377], fArmElbow: [206, 450], fArmHand: [344, 388],
@@ -125,20 +125,34 @@
     els.rodHandle.setAttribute('x2', p.rodGrip[0]);
     els.rodHandle.setAttribute('y2', p.rodGrip[1]);
 
-    els.frontLeg.setAttribute('d', limb(p.hipFront[0] - 22, p.hipFront[1] + 16, p.fKnee[0] + 4, p.fKnee[1] - 6, p.fFoot[0], p.fFoot[1], 32));
+    els.frontLeg.setAttribute('d', limb(p.hipFront[0] - 22, p.hipFront[1] + 16, p.fKnee[0] + 4, p.fKnee[1] - 6, p.fFoot[0], p.fFoot[1], 36));
 
-    // Tronco
+    // Tronco com a coluna curvando (arqueia para trás e projeta para frente sem esmagar)
     const [tx, ty] = p.torsoTop, [sx, sy] = p.torsoShoulder, [hfx, hfy] = p.hipFront, [hbx, hby] = p.hipBack;
+    const bend = p.spineBend || 0;
+    const topMidX = (tx + sx) * 0.5, topMidY = (ty + sy) * 0.5;
+    const botMidX = (hbx + hfx) * 0.5, botMidY = (hby + hfy) * 0.5;
+    const spL = Math.hypot(topMidX - botMidX, topMidY - botMidY) || 1;
+    const usx = (topMidX - botMidX) / spL, usy = (topMidY - botMidY) / spL;
+    const nfx = -usy, nfy = usx;
+    const bsx = tx - usx * 52 - nfx * 14, bsy = ty - usy * 52 - nfy * 14;
+    const fmx = (sx + hfx) * 0.5 + nfx * bend, fmy = (sy + hfy) * 0.5 + nfy * bend;
+    const bmx = (bsx + hbx) * 0.5 + nfx * bend, bmy = (bsy + hby) * 0.5 + nfy * bend;
     els.torsoBorder.setAttribute('d',
-      `M ${tx} ${ty} C ${tx + 23} ${ty - 4}, ${sx - 20} ${sy - 17}, ${sx} ${sy} L ${hfx} ${hfy} ` +
-      `C ${hfx + 5} ${hfy + 30}, ${hfx - 10} ${hfy + 54}, ${hfx - 36} ${hfy + 60} C ${hbx + 30} ${hby + 52}, ${hbx + 10} ${hby + 34}, ${hbx} ${hby} ` +
-      `L ${tx - 22} ${ty + 54} C ${tx - 27} ${ty + 24}, ${tx - 20} ${ty + 4}, ${tx} ${ty} Z`);
+      `M ${tx} ${ty} C ${tx + nfx * 22} ${ty + nfy * 22}, ${sx - nfx * 18} ${sy - nfy * 18}, ${sx} ${sy} ` +
+      `Q ${fmx} ${fmy}, ${hfx} ${hfy} ` +
+      `C ${hfx + 5} ${hfy + 30}, ${hfx - 10} ${hfy + 54}, ${hfx - 36} ${hfy + 60} ` +
+      `C ${hbx + 30} ${hby + 52}, ${hbx + 10} ${hby + 34}, ${hbx} ${hby} ` +
+      `Q ${bmx} ${bmy}, ${bsx} ${bsy} ` +
+      `C ${bsx + usx * 26} ${bsy + usy * 26}, ${tx - nfx * 16} ${ty - nfy * 16}, ${tx} ${ty} Z`);
     els.backLeg.setAttribute('d', limb(hbx + 44, hby + 19, p.bKnee[0] + 6, p.bKnee[1] - 2, p.bFoot[0], p.bFoot[1], 34));
     els.torsoFill.setAttribute('d',
-      `M ${tx} ${ty} C ${tx + 23} ${ty - 4}, ${sx - 20} ${sy - 17}, ${sx} ${sy} L ${hfx - 1} ${hfy} ` +
+      `M ${tx} ${ty} C ${tx + nfx * 22} ${ty + nfy * 22}, ${sx - nfx * 18} ${sy - nfy * 18}, ${sx} ${sy} ` +
+      `Q ${fmx - 1} ${fmy}, ${hfx - 1} ${hfy} ` +
       `C ${hfx + 3} ${hfy + 23}, ${hfx - 6} ${hfy + 43}, ${hfx - 24} ${hfy + 52} L ${hbx + 32} ${hby + 38} ` +
-      `C ${hbx + 12} ${hby + 29}, ${hbx + 4} ${hby + 9}, ${hbx - 2} ${hby - 11} L ${tx - 22} ${ty + 54} ` +
-      `C ${tx - 27} ${ty + 24}, ${tx - 20} ${ty + 4}, ${tx} ${ty} Z`);
+      `C ${hbx + 12} ${hby + 29}, ${hbx + 4} ${hby + 9}, ${hbx - 2} ${hby - 11} ` +
+      `Q ${bmx} ${bmy}, ${bsx} ${bsy} ` +
+      `C ${bsx + usx * 26} ${bsy + usy * 26}, ${tx - nfx * 16} ${ty - nfy * 16}, ${tx} ${ty} Z`);
 
     // Braço da frente
     const armD = limb(p.fArmShoulder[0], p.fArmShoulder[1], p.fArmElbow[0], p.fArmElbow[1], p.fArmHand[0], p.fArmHand[1], 38);
@@ -185,13 +199,21 @@
 
   const CYCLE = 6.5;
   function poseAt(t) {
-    if (t < 1.3) return interpolatePose(POSES.slouched, POSES.castThrow, (Math.sin((t / 1.3) * Math.PI * 2) + 1) * 0.12 * 0.15);
-    if (t < 1.9) return interpolatePose(POSES.slouched, POSES.windup, (t - 1.3) / 0.6);
-    if (t < 2.3) return interpolatePose(POSES.windup, POSES.castThrow, (t - 1.9) / 0.4);
-    if (t < 3.1) return interpolatePose(POSES.castThrow, POSES.slouched, ((t - 2.3) / 0.8) * 0.35);
-    if (t < 3.7) return interpolatePose(interpolatePose(POSES.castThrow, POSES.slouched, 0.35), POSES.ready, (t - 3.1) / 0.6);
-    if (t < 4.3) return interpolatePose(POSES.ready, POSES.pullHard, (t - 3.7) / 0.6);
-    if (t < 5.9) return interpolatePose(POSES.pullHard, POSES.pullPeak, (1 - Math.cos(((t - 4.3) / 1.6) * Math.PI * 4)) / 2);
+    // Gingado suave antes de preparar o bote
+    if (t < 1.2) return interpolatePose(POSES.slouched, POSES.ready, ((Math.sin((t / 1.2) * Math.PI * 2) + 1) * 0.5) * 0.14);
+    // Leva a coluna para trás ganhando impulso
+    if (t < 1.95) return interpolatePose(POSES.slouched, POSES.windup, (t - 1.2) / 0.75);
+    // Chicoteia o corpo para frente jogando a vara
+    if (t < 2.28) return interpolatePose(POSES.windup, POSES.castThrow, (t - 1.95) / 0.33);
+    // Assenta na postura firme logo após o arremesso
+    if (t < 2.95) return interpolatePose(POSES.castThrow, POSES.ready, (t - 2.28) / 0.67);
+    // Firme e alerta, sentindo a fisgada
+    if (t < 3.65) return interpolatePose(POSES.ready, POSES.pullHard, Math.sin(((t - 2.95) / 0.7) * Math.PI) * 0.15);
+    // Puxa com força inclinando o corpo para trás
+    if (t < 4.25) return interpolatePose(POSES.ready, POSES.pullHard, (t - 3.65) / 0.6);
+    // Trancos de força puxando o peixe
+    if (t < 5.9) return interpolatePose(POSES.pullHard, POSES.pullPeak, (1 - Math.cos(((t - 4.25) / 1.65) * Math.PI * 4)) / 2);
+    // Volta à postura desleixada para reiniciar
     return interpolatePose(POSES.pullHard, POSES.slouched, (t - 5.9) / 0.6);
   }
 

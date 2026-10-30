@@ -61,6 +61,28 @@ a{color:#C8F0F8}a:hover{color:#F8C8F8}
 @media (max-width:760px),(pointer:coarse){.ruido{display:none}.os [style*="backdrop-filter"]{backdrop-filter:none !important;-webkit-backdrop-filter:none !important}.float{animation:none}.card:hover{transform:none}}
 @media (max-width:760px){.navmid{display:none !important}.heroh1{font-size:52px !important}.h2big{font-size:40px !important}.sect{padding-left:16px !important;padding-right:16px !important}.faq p{padding-right:0}}
 @media (prefers-reduced-motion:reduce){.float,.flutua,.pulse,.bob,.marq{animation:none}.rw .w{opacity:1;transform:none}.fade{opacity:1;transform:none}}
+/* Bolinha que anda acima do rodapé: só transform (leve), ciclo de 7 s */
+.bolinha-trilha{position:relative;height:172px;margin-top:72px;pointer-events:none}
+.bolinha-anda{position:absolute;left:50%;bottom:0;width:150px;margin-left:-75px;animation:blTravessia 7s linear infinite;will-change:transform}
+.bolinha{display:block;width:150px;height:auto;overflow:visible}
+.bl-corpo{animation:blQuique 7s ease-in-out infinite}
+.bl-pes{animation:blPes 7s ease-in-out infinite}
+.bl-pe-e,.bl-pe-d,.bl-pisca{transform-box:fill-box;transform-origin:center}
+.bl-pe-e{animation:blPeE 7s linear infinite}
+.bl-pe-d{animation:blPeD 7s linear infinite}
+.bl-olho-e{animation:blOlhoE 7s ease-in-out infinite}
+.bl-olho-d{animation:blOlhoD 7s ease-in-out infinite}
+.bl-pisca{animation:blPisca 7s ease-in-out infinite}
+.bolinha-trilha.parada *{animation-play-state:paused}
+@keyframes blTravessia{0%{transform:translateX(calc(-50vw - 120px))}35%,65%{transform:translateX(0)}100%{transform:translateX(calc(50vw + 120px))}}
+@keyframes blQuique{0%,8.75%,17.5%,26.25%,35%,65%,73.75%,82.5%,91.25%,100%{transform:translateY(0)}4.37%,13.12%,21.87%,30.62%,69.37%,78.12%,86.87%,95.62%{transform:translateY(-10px)}}
+@keyframes blPes{0%,36%{transform:translateX(10px)}42%,58%{transform:translateX(0)}64%,100%{transform:translateX(10px)}}
+@keyframes blPeE{0%,8.75%,17.5%,26.25%{transform:translate(-22px,0) rotate(10deg)}2.18%,10.93%,19.68%,28.43%{transform:translate(0,-18px) rotate(-18deg)}4.37%,13.12%,21.87%,30.62%{transform:translate(24px,0) rotate(-6deg)}6.56%,15.31%,24.06%,32.81%{transform:translate(0,2px) rotate(4deg)}35%,65%{transform:translate(0,0) rotate(0)}67.18%,75.93%,84.68%,93.43%{transform:translate(0,-18px) rotate(-18deg)}69.37%,78.12%,86.87%,95.62%{transform:translate(24px,0) rotate(-6deg)}71.56%,80.31%,89.06%,97.81%{transform:translate(0,2px) rotate(4deg)}73.75%,82.5%,91.25%,100%{transform:translate(-22px,0) rotate(10deg)}}
+@keyframes blPeD{0%,8.75%,17.5%,26.25%{transform:translate(24px,0) rotate(-6deg)}2.18%,10.93%,19.68%,28.43%{transform:translate(0,2px) rotate(4deg)}4.37%,13.12%,21.87%,30.62%{transform:translate(-22px,0) rotate(10deg)}6.56%,15.31%,24.06%,32.81%{transform:translate(0,-18px) rotate(-18deg)}35%,65%{transform:translate(0,0) rotate(0)}67.18%,75.93%,84.68%,93.43%{transform:translate(0,2px) rotate(4deg)}69.37%,78.12%,86.87%,95.62%{transform:translate(-22px,0) rotate(10deg)}71.56%,80.31%,89.06%,97.81%{transform:translate(0,-18px) rotate(-18deg)}73.75%,82.5%,91.25%,100%{transform:translate(24px,0) rotate(-6deg)}}
+@keyframes blOlhoE{0%,36%{transform:translateX(0)}42%,58%{transform:translateX(-56px)}64%,100%{transform:translateX(0)}}
+@keyframes blOlhoD{0%,36%{transform:translateX(0)}42%,58%{transform:translateX(-48px)}64%,100%{transform:translateX(0)}}
+@keyframes blPisca{0%,16%,19%,47%,50%,53%,82%,85%,100%{transform:scaleY(1)}17.5%,48.5%,51.5%,83.5%{transform:scaleY(.05)}}
+@media (prefers-reduced-motion:reduce){.bolinha-anda,.bolinha *{animation:none !important}}
 </style>
 </head>
 <body>
@@ -506,7 +528,7 @@ a{color:#C8F0F8}a:hover{color:#F8C8F8}
 </section>
 
 <!-- CTA FINAL -->
-<section class="sect" style="position: relative; padding: 140px 64px 180px; overflow: hidden">
+<section class="sect" style="position: relative; padding: 140px 64px 0; overflow: hidden">
 <div aria-hidden="true" style="position: absolute; left: 50%; top: 50%; width: 900px; height: 500px; transform: translate(-50%,-50%); border-radius: 50%; background: radial-gradient(ellipse, rgba(216,144,240,.16), rgba(144,240,248,.07) 45%, transparent 70%); filter: blur(40px); pointer-events: none"></div>
 <div style="position: relative; max-width: 960px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 32px; text-align: center">
 <h2 class="rw h2big" data-reveal="1" style="font-family: Sora, sans-serif; font-weight: 300; font-size: 80px; line-height: 1.02; letter-spacing: -.04em">
@@ -514,6 +536,22 @@ a{color:#C8F0F8}a:hover{color:#F8C8F8}
 </h2>
 <p class="fade" data-fade="1" style="max-width: 540px; font-size: 18px; line-height: 1.6; color: #A3A3A3">Vamos aumentar o fluxo de clientes do seu negócio. Comece pelo diagnóstico gratuito.</p>
 <a class="cta fade" data-fade="1" href="https://wa.me/5512996013011">Agendar diagnóstico gratuito<span class="arr" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M13 6l6 6-6 6"></path></svg></span></a>
+</div>
+<!-- Bolinha andando acima da linha do rodapé -->
+<div class="bolinha-trilha" aria-hidden="true">
+<div class="bolinha-anda">
+<svg class="bolinha" viewBox="-150 90 300 345" xmlns="http://www.w3.org/2000/svg">
+<g class="bl-pes">
+<path class="bl-pe-e" fill="#fff" d="M -72 418 C -72 394, -14 392, -12 418 C -11 426, -18 430, -42 430 C -66 430, -73 426, -72 418 Z"></path>
+<path class="bl-pe-d" fill="#fff" d="M 12 418 C 12 394, 70 392, 72 418 C 73 426, 66 430, 42 430 C 18 430, 11 426, 12 418 Z"></path>
+</g>
+<g class="bl-corpo">
+<circle cx="0" cy="235" r="130" fill="#fff"></circle>
+<g class="bl-olho-e"><ellipse class="bl-pisca" cx="18" cy="228" rx="13.5" ry="32" fill="#000"></ellipse></g>
+<g class="bl-olho-d"><ellipse class="bl-pisca" cx="86" cy="228" rx="12" ry="32" fill="#000"></ellipse></g>
+</g>
+</svg>
+</div>
 </div>
 </section>
 

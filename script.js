@@ -255,6 +255,15 @@
     }, { rootMargin: '0px 0px 80px 0px', threshold: 0 }).observe(v);
   });
 
+  // ---------- bolinha acima do rodapé: pausa quando não está na tela ----------
+  document.querySelectorAll('.bolinha-trilha').forEach((trilha) => {
+    if (!io) return;
+    trilha.classList.add('parada');
+    new IntersectionObserver((entries) => {
+      entries.forEach((e) => trilha.classList.toggle('parada', !e.isIntersecting));
+    }).observe(trilha);
+  });
+
   // ---------- formulário de análise em 4 etapas ----------
   const questions = [
     { title: 'Qual é o seu faturamento mensal atual?', sub: 'Selecione a opção que melhor descreve sua situação.',
